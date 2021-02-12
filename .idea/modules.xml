@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../FlaskEdu/.idea/FlaskEdu.iml" filepath="$PROJECT_DIR$/../FlaskEdu/.idea/FlaskEdu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/flaskWEBProj.iml" filepath="$PROJECT_DIR$/.idea/flaskWEBProj.iml" />
+    </modules>
+  </component>
+</project>
