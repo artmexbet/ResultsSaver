@@ -34,7 +34,9 @@ def add_user():
     if request.method == "POST":
         data = request.form
         if data["Password"] != data["Password_confirmation"]:
-            return render_template("reg.html", is_password_possible=False)
+            return render_template("reg.html", is_password_possible=False, is_form_passed=True)
+        if not all(data.values()):
+            return render_template("reg.html", is_all_fields_filled=False, is_form_passed=True)
         user = User(name=f'{data["Name"]} {data["Surname"]} {data["Lastname"]}', class_digit=int(data["Stage_number"]),
                     stage=data["Stage_letter"], is_command=(1 if data["Teamed"] == "on" else 0), login=data['Login'],
                     password=data['Password'])
@@ -43,7 +45,7 @@ def add_user():
         db.session.commit()
         return redirect("/")
     else:
-        return render_template("reg.html")
+        return render_template("reg.html", is_form_passed=False)
 
 
 @app.route("/")

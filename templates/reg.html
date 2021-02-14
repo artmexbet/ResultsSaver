@@ -20,13 +20,18 @@
                class="form-control"><br>
         <input name="Stage_letter" id="stage" type="text" placeholder="Буквы класса"
                class="form-control"><br>
-        <input type="checkbox" class="form-control" name="Teamed" placeholder="В команде">
+        <div class="form-control">
+            <input type="checkbox" class="form-control-input" id="exampleCheck1" name="Teamed">
+            <label class="form-control-label" for="exampleCheck1">В команде</label>
+        </div>
+        <br>
+        {% if not all_field_filled and is_form_passed %}
+            <div class="alert alert-danger"><p class="h6">Не все поля заполненны!</p></div>
+        {% elif not is_password_possible and is_form_passed %}
+            <div class="alert alert-danger"><p class="h6">Пароли не совпадают!</p></div>
+        {% endif %}
         <input type="submit" class="btn btn-success" value="Отправить">
     </form>
 </div>
-{#    <input type="radio" name="stage" value="radiobutton"> Пиво#}
-{#    <input type="radio" name="stage" value="radiobutton"> Чай#}
-{#    <input type="radio" name="stage" value="radiobutton"> Кофе <br>#}
-{#    <input type="text" name="stage_letter" id="stage" placeholder="Буквы класс" class="form-control">#}
 </body>
 </html>
