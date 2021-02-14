@@ -5,6 +5,8 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///table.db'
 db = SQLAlchemy(app)
 
+session = {"current_user": None, "is_admin": False}
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,6 +48,26 @@ def add_user():
         return redirect("/")
     else:
         return render_template("reg.html", is_form_passed=False)
+
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "POST":
+        data = request.form
+        for i, elem in enumerate(User.query.all(), 1):
+            if elem.login == data["Login"]:
+                if elem.password == data['Password']:
+                    session["current_user"] = elem
+                    with open("admins.txt") as admins:
+                        admins = map(str().strip, admins.readlines())
+                        session["is_admin"] = elem.login in admins
+                    return redirect("/")
+                else:
+                    return render_template("login.html", is_password_normal=False)
+            else:
+                return render_template("login.html", is_login_normal=False)
+
+    return render_template("login.html", is_form_passed=False)
 
 
 @app.route("/")

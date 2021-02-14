@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+{% block body %}
+<main class="text-center container">
+    <div class="container mt-5">
+        <h1>Регистрация</h1>
+        <form method="post">
+            <input name="Login" id="login" type="text" placeholder="Логин" class="form-control"><br>
+            <input name="Password" id="password" type="password" placeholder="Пароль" class="form-control"><br>
+            {% if not all_field_filled and is_form_passed %}
+                <div class="alert alert-danger"><p class="h6">Не все поля заполненны!</p></div>
+            {% endif %}
+            <input type="submit" class="btn btn-success" value="Отправить">
+        </form>
+    </div>
+</main>
+{% endblock %}
