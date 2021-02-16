@@ -55,19 +55,15 @@ def login():
     if request.method == "POST":
         data = request.form
         for i, elem in enumerate(User.query.all(), 1):
-            if elem.login == data["Login"]:
-                if elem.password == data['Password']:
-                    session["current_user"] = elem
-                    with open("admins.txt") as admins:
-                        admins = map(str().strip, admins.readlines())
-                        session["is_admin"] = elem.login in admins
-                    return redirect("/")
-                else:
-                    return render_template("login.html", is_password_normal=False)
-            else:
-                return render_template("login.html", is_login_normal=False)
+            if elem.login == data["Login"] and elem.password == data["Password"]:
+                session["current_user"] = elem
+                with open("admins.txt") as admins:
+                    admins = map(str().strip, admins.readlines())
+                    session["is_admin"] = elem.login in admins
+                return redirect("/")
+        return render_template("login.html", invalid_login=True)
 
-    return render_template("login.html", is_form_passed=False)
+    return render_template("login.html")
 
 
 @app.route("/")
