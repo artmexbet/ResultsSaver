@@ -13,6 +13,11 @@ def main():
 
 @app.route("/users", methods=["GET", "POST"])
 def users():
+    """
+    При POST запросе этот route запишет в бд людей,
+    При GET запросе вернёт json файл с всеми пользователями
+    :return: JSON с пользователями; ok; error
+    """
     if request.method == "GET":
         return {"id": ["params"]}
     else:
