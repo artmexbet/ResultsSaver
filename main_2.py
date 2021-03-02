@@ -25,11 +25,10 @@ def users():
         pass
 
 
-@app.route("/add_result/<subject>/<int:user_id>", methods=["POST"])
-def add_result(subject: str, user_id: int):
+@app.route("/add_result/<int:user_id>", methods=["POST"])
+def add_result(user_id: int):
     """
     Здесь добавляем результаты людям
-    :param subject: Имя предмета, по которому мы будем добавлять результаты
     :param user_id: id пользователя, которому будут добавлены баллы
     :return: Прога вернёт вердикт, в нормальном положении это что-то вроде "ok"
     """
