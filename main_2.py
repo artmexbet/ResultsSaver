@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect
+from Utilities import *
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///table.db'
@@ -21,8 +23,9 @@ def users():
     if request.method == "GET":
         return {"id": ["params"]}
     else:
-        # Тут мы будем добавлять в базу данных людей, если их там нет
-        pass
+        data = request.data
+        xlsx_file = save_xlsx_file(str(datetime.now().date()), data)
+        return "ok"
 
 
 @app.route("/add_result/<int:user_id>", methods=["POST"])
