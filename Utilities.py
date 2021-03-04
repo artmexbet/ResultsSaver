@@ -23,7 +23,11 @@ def save_xlsx_file(filename, byte_data):
 
 
 class JsonDB(dict):
-    def __init__(self, name):
+    def __init__(self, name: str):
+        """
+        Базовый класс-API для работы с БД на JSON
+        :param name: имя файла С ТИПОМ ("test.json")
+        """
         self.directory = f"databases/{name}"
         if not os.path.exists(self.directory):
             self.commit()
@@ -44,29 +48,59 @@ class JsonDB(dict):
         return self
 
     def commit(self):
+        """
+        Функция сохранения
+        :return:
+        """
         with open(self.directory, "w", encoding="utf8") as f:
             json.dump(self, f, ensure_ascii=False)
 
 
 class Day(JsonDB):
-    def __init__(self, name, subjects_database: dict, day: int):
+    def __init__(self, name, subjects_database: dict):
+        """
+        Класс для работы с участниками. Для каждого года
+        создаётся новая база данных (возможно скопируем эту, только без данных).
+        Класс наследован от базового класса БД.
+        :param name: имя файла С ТИПОМ ("test.json")
+        :param subjects_database: база данных предметов, также создаётся каждый год
+        """
         super(Day, self).__init__(name)
         self.subject_database = subjects_database
-        self.day = day
+        self.day = 0
 
-    def add_result(self, student_id, subject, score):
+    def add_result(self, student_id: str, subject: str, score: int):
+        """
+        Этот метод присваивает пользователю результат
+        :param student_id: id студента
+        :param subject: предмет
+        :param score: результат
+        :return:
+        """
         if subject in self.subject_database.keys():
-            try:
-                self[student_id]['days'][self.day - 1][subject] = [score, -1]
-            except IndexError:
-                self[student_id]['days'].append({subject: [score, -1]})
-            return 0
+            if self.day == self.subject_database[subject][0] - 1:
+                try:
+                    self[student_id]['days'][self.day][subject] = [score, -1]
+                except IndexError:
+                    self[student_id]['days'].append({subject: [score, -1]})
+                return 0  # Всё прошло успешно
+            else:
+                return 2  # Этого предмета в этот день нет
         else:
-            return 1
+            return 1  # Такого предмета не существует
+
+    def set_day(self, new_day=None):
+        if new_day:
+            self.day = new_day
+        else:
+            self.day += 1
 
 
 if __name__ == '__main__':
     subjects = JsonDB("subjects.json")
-    d = Day("test.json", subjects, 0)
+    d = Day("test.json", subjects)
     print(d.add_result("1", "physics", 10))
+    d.set_day()
+    print(d.add_result("1", "physics", 10))
+    print(d.add_result("1", "history", 20))
     d.commit()
