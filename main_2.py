@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, request
 from Utilities import *
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///table.db'
-db = SQLAlchemy(app)
+subjects = JsonDB("subjects.json")
+d = Day("test.json", subjects)
 
 
 @app.route("/")
@@ -36,6 +35,20 @@ def add_result(user_id: int):
     :return: Прога вернёт вердикт, в нормальном положении это что-то вроде "ok"
     """
     pass
+
+
+@app.route("/test_for_correct", methods=["POST"])
+def search():
+    data = request.json
+    """Пример json в файле example.json"""
+    if data["id"] not in d.keys():
+        return 3  # Ошибка идентификатора
+    elif data["subject"] not in subjects.keys():
+        return 1  # Такого предмета не существует
+    elif data["score"] not in range(subjects[data["subject"]][1] + 1):
+        return 4  # Невозможные баллы
+    else:
+        return 0  # Всё прошло успешно
 
 
 if __name__ == '__main__':
