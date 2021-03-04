@@ -20,10 +20,10 @@ def users():
     :return: JSON с пользователями; ok; error
     """
     if request.method == "GET":
-        return {"id": ["params"]}
+        return d
     else:
         data = request.data
-        xlsx_file = save_xlsx_file(str(datetime.now().date()), data)
+        xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
         return "ok"
 
 
@@ -49,6 +49,14 @@ def search():
         return 4  # Невозможные баллы
     else:
         return 0  # Всё прошло успешно
+
+
+@app.route("/create_new_db", methods=["POST"])
+def new_db():  # по поводу этой штуки вообще не уверен
+    global subjects, d
+    data = request.json
+    subjects = JsonDB("subjects.json")
+    d = Day(str(datetime.now().date()) + ".json", subjects)
 
 
 if __name__ == '__main__':
