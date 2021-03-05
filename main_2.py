@@ -27,14 +27,16 @@ def users():
         return "ok"
 
 
-@app.route("/add_result/<int:user_id>", methods=["POST"])
-def add_result(user_id: int):
+@app.route("/add_result/<user_id>", methods=["POST"])
+def add_result(user_id):
     """
     Здесь добавляем результаты людям
     :param user_id: id пользователя, которому будут добавлены баллы
     :return: Прога вернёт вердикт, в нормальном положении это что-то вроде "ok"
     """
-    pass
+    # Пример запроса в файле result_example.json
+    data = request.json
+    return d.add_result(user_id, data["subject"], data["score"])
 
 
 @app.route("/test_for_correct", methods=["POST"])
@@ -55,9 +57,14 @@ def search():
 def new_db():  # по поводу этой штуки вообще не уверен
     global subjects, d
     data = request.json
-    subjects = JsonDB("subjects.json")
+    subjects = JsonDB(f"subjects-{datetime.now().date()}.json")
     d = Day(str(datetime.now().date()) + ".json", subjects)
 
 
+@app.route("/recount", methods=["POST"])
+def recount():
+    data = request.json
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
