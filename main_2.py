@@ -59,11 +59,15 @@ def new_db():  # по поводу этой штуки вообще не уве�
     data = request.json
     subjects = JsonDB(f"subjects-{datetime.now().date()}.json")
     d = Day(str(datetime.now().date()) + ".json", subjects)
+    return 0
 
 
 @app.route("/recount", methods=["POST"])
 def recount():
+    # Пример запроса смотрите в файле recount_example.json
     data = request.json
+    if data["is_admin"]:
+        pass
 
 
 if __name__ == '__main__':

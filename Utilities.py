@@ -95,12 +95,36 @@ class Day(JsonDB):
         else:
             self.day += 1
 
+    @property
+    def results(self) -> dict:
+        temp_results = {}
+        for key in self.keys():
+            temp_results[key] = {}
+            for result in self[key]["days"][self.day].keys():
+                temp_results[key][result] = self[key]["days"][self.day][result][0]
+        return temp_results
+
+
+def all_subject_results(results, subject) -> (dict, int):
+    # pass
+    temp = {}
+    for key in results.keys():
+        if subject in results[key].keys():
+            temp[key] = results[key][subject]
+    if not len(temp):
+        return 5
+    return temp
+
+
+def recount(day: Day, all_subjects: JsonDB) -> int:
+    # pass
+    for subject in all_subjects.keys():
+        subject_result = all_subject_results(day.results, subject)
+        max_result = max(subject_result)
+        pass
+
 
 if __name__ == '__main__':
     subjects = JsonDB("subjects.json")
     d = Day("test.json", subjects)
-    print(d.add_result("1", "physics", 10))
-    d.set_day()
-    print(d.add_result("1", "physics", 10))
-    print(d.add_result("1", "history", 20))
-    d.commit()
+    print(d.results)
