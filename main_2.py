@@ -67,7 +67,7 @@ def recount_main():
     # Пример запроса смотрите в файле recount_example.json
     data = request.json
     if data["is_admin"]:
-        pass
+        recount(d, subjects)
 
 
 if __name__ == '__main__':
