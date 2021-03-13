@@ -99,17 +99,21 @@ class Day(JsonDB):
     def results(self) -> dict:
         temp_results = {}
         for key in self.keys():
-            temp_results[key] = {}
+            temp_results[key] = {"class": self[key]["class"]}
             for result in self[key]["days"][self.day].keys():
                 temp_results[key][result] = self[key]["days"][self.day][result][0]
         return temp_results
 
+    @property
+    def classes_count(self) -> tuple:
+        temp = {self[key]["class"] for key in self.keys()}
+        return min(temp), max(temp) + 1
 
-def all_subject_results(results, subject) -> (dict, int):
-    # pass
+
+def all_subject_results(results, subject, class_digit) -> (dict, int):
     temp = {}
     for key in results.keys():
-        if subject in results[key].keys():
+        if subject in results[key].keys() and results[key]["class"] == class_digit:
             temp[key] = results[key][subject]
     if not len(temp):
         return 5
@@ -117,14 +121,24 @@ def all_subject_results(results, subject) -> (dict, int):
 
 
 def recount(day: Day, all_subjects: JsonDB) -> int:
-    # pass
     for subject in all_subjects.keys():
-        subject_result = all_subject_results(day.results, subject)
-        max_result = max(subject_result)
-        pass
+        for class_digit in range(*day.classes_count):
+            subject_result = all_subject_results(day.results, subject, class_digit)
+            print(subject_result)
+            if isinstance(subject_result, dict):
+                user_id, max_result = max(subject_result.items(), key=lambda x: x[1])
+                if max_result > all_subjects[subject][1] / 2:
+                    percent = max_result / 100
+                else:
+                    percent = all_subjects[subject][1] / 200
+                for i, val in subject_result.items():
+                    day[user_id]["days"][day.day][subject][1] = val / percent
+                day.commit()
+    return 1
 
 
 if __name__ == '__main__':
     subjects = JsonDB("subjects.json")
     d = Day("test.json", subjects)
+    recount(d, subjects)
     print(d.results)

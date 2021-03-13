@@ -17,14 +17,14 @@ def users():
     """
     При POST запросе этот route запишет в бд людей,
     При GET запросе вернёт json файл с всеми пользователями
-    :return: JSON с пользователями; ok; error
+    :return: JSON с пользователями; 0; error
     """
     if request.method == "GET":
         return d
     else:
         data = request.data
         xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
-        return "ok"
+        return 0
 
 
 @app.route("/add_result/<user_id>", methods=["POST"])
@@ -63,7 +63,7 @@ def new_db():  # по поводу этой штуки вообще не уве�
 
 
 @app.route("/recount", methods=["POST"])
-def recount():
+def recount_main():
     # Пример запроса смотрите в файле recount_example.json
     data = request.json
     if data["is_admin"]:
