@@ -27,7 +27,7 @@ def users():
         return 0
 
 
-@app.route("/add_result/<user_id>", methods=["POST"])
+@app.route("/add_result/<int:user_id>", methods=["POST"])
 def add_result(user_id):
     """
     Здесь добавляем результаты людям

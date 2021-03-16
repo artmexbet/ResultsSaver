@@ -69,7 +69,7 @@ class Day(JsonDB):
         self.subject_database = subjects_database
         self.day = 0
 
-    def add_result(self, student_id: str, subject: str, score: int):
+    def add_result(self, student_id: int, subject: str, score: int):
         """
         Этот метод присваивает пользователю результат
         :param student_id: id студента
@@ -80,9 +80,9 @@ class Day(JsonDB):
         if subject in self.subject_database.keys():
             if self.day == self.subject_database[subject][0] - 1:
                 try:
-                    self[student_id]['days'][self.day][subject] = [score, -1]
+                    self["users"][student_id - 1]['days'][self.day][subject] = [score, -1]
                 except IndexError:
-                    self[student_id]['days'].append({subject: [score, -1]})
+                    self["users"][student_id - 1]['days'].append({subject: [score, -1]})
                 return 0  # Всё прошло успешно
             else:
                 return 2  # Этого предмета в этот день нет
@@ -97,16 +97,17 @@ class Day(JsonDB):
 
     @property
     def results(self) -> dict:
+        """Эта штуковина возвращает результаты участников по id и классам"""
         temp_results = {}
-        for key in self.keys():
-            temp_results[key] = {"class": self[key]["class"]}
-            for result in self[key]["days"][self.day].keys():
-                temp_results[key][result] = self[key]["days"][self.day][result][0]
+        for index in range(len(self["users"])):
+            temp_results[index] = {"class": self["users"][index]["class"]}
+            for result in self["users"][index]["days"][self.day].keys():
+                temp_results[index][result] = self["users"][index]["days"][self.day][result][0]
         return temp_results
 
     @property
     def classes_count(self) -> tuple:
-        temp = {self[key]["class"] for key in self.keys()}
+        temp = {self["users"][index]["class"] for index in range(len(self["users"]))}
         return min(temp), max(temp) + 1
 
 
@@ -132,9 +133,14 @@ def recount(day: Day, all_subjects: JsonDB) -> int:
                 else:
                     percent = all_subjects[subject][1] / 200
                 for i, val in subject_result.items():
-                    day[user_id]["days"][day.day][subject][1] = val / percent
+                    day["users"][user_id]["days"][day.day][subject][1] = val / percent
                 day.commit()
     return 1
+
+
+def sorting(day: Day):
+    day["users"].sort(lambda x: x["id"])
+    day.commit()
 
 
 if __name__ == '__main__':
