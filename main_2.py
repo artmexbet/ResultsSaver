@@ -3,6 +3,16 @@ from Utilities import *
 from datetime import datetime
 
 app = Flask(__name__)
+
+
+def new_db():  # по поводу этой штуки вообще не уверен
+    global subjects, d
+    data = request.json
+    subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
+    d = Day(str(datetime.now().date()) + ".json", subjects, {"users": []})
+    return 0
+
+
 subjects = JsonDB("subjects.json")
 d = Day("test.json", subjects)
 
@@ -53,21 +63,21 @@ def search():
         return 0  # Всё прошло успешно
 
 
-@app.route("/create_new_db", methods=["POST"])
-def new_db():  # по поводу этой штуки вообще не уверен
-    global subjects, d
-    data = request.json
-    subjects = JsonDB(f"subjects-{datetime.now().date()}.json")
-    d = Day(str(datetime.now().date()) + ".json", subjects)
-    return 0
-
-
 @app.route("/recount", methods=["POST"])
 def recount_main():
     # Пример запроса смотрите в файле recount_example.json
     data = request.json
     if data["is_admin"]:
         recount(d, subjects)
+        return 0
+    return -1
+
+
+@app.route("/add_user", methods=["POST"])
+def add_user():
+    data = request.json
+    d["users"].append(data)
+    return 0
 
 
 if __name__ == '__main__':

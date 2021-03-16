@@ -23,17 +23,22 @@ def save_xlsx_file(filename, byte_data):
 
 
 class JsonDB(dict):
-    def __init__(self, name: str):
+    def __init__(self, name: str, value: dict = None):
         """
         Базовый класс-API для работы с БД на JSON
         :param name: имя файла С ТИПОМ ("test.json")
         """
         self.directory = f"databases/{name}"
         if not os.path.exists(self.directory):
+            if value:
+                super().__init__(value)
+            else:
+                super().__init__({})
             self.commit()
-        with open(self.directory, encoding="utf8") as f:
-            js = json.load(f)
-        super().__init__(js)
+        else:
+            with open(self.directory, encoding="utf8") as f:
+                js = json.load(f)
+            super().__init__(js)
 
     def __getitem__(self, item):
         if item in self.keys():
@@ -57,7 +62,7 @@ class JsonDB(dict):
 
 
 class Day(JsonDB):
-    def __init__(self, name, subjects_database: dict):
+    def __init__(self, name, subjects_database: dict, value: dict = None):
         """
         Класс для работы с участниками. Для каждого года
         создаётся новая база данных (возможно скопируем эту, только без данных).
@@ -65,7 +70,7 @@ class Day(JsonDB):
         :param name: имя файла С ТИПОМ ("test.json")
         :param subjects_database: база данных предметов, также создаётся каждый год
         """
-        super(Day, self).__init__(name)
+        super(Day, self).__init__(name, value)
         self.subject_database = subjects_database
         self.day = 0
 
@@ -144,7 +149,7 @@ def sorting(day: Day):
 
 
 if __name__ == '__main__':
-    subjects = JsonDB("subjects.json")
-    d = Day("test.json", subjects)
-    recount(d, subjects)
-    print(d.results)
+    subjects_test = JsonDB("subjects.json")
+    d_test = Day("test.json", subjects_test)
+    recount(d_test, subjects_test)
+    print(d_test.results)
