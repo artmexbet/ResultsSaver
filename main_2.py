@@ -77,6 +77,7 @@ def recount_main():
 def add_user():
     data = request.json
     d["users"].append(data)
+    sorting(d)
     return 0
 
 
