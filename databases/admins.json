@@ -1,0 +1,16 @@
+{
+  "admins": [
+    {
+      "login": "artmexbet",
+      "password": "assas",
+      "name": "Артём",
+      "subject": "Physics"
+    },
+    {
+      "login": "JustyTry",
+      "password": "ass",
+      "name": "Саша",
+      "subject": "Memology"
+    }
+  ]
+}

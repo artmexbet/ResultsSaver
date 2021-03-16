@@ -62,7 +62,7 @@ class JsonDB(dict):
 
 
 class Day(JsonDB):
-    def __init__(self, name, subjects_database: dict, value: dict = None):
+    def __init__(self, name, subjects_database: dict):
         """
         Класс для работы с участниками. Для каждого года
         создаётся новая база данных (возможно скопируем эту, только без данных).
@@ -70,7 +70,11 @@ class Day(JsonDB):
         :param name: имя файла С ТИПОМ ("test.json")
         :param subjects_database: база данных предметов, также создаётся каждый год
         """
-        super(Day, self).__init__(name, value)
+        directory = f"databases/{name}"
+        if not os.path.exists(directory):
+            super(Day, self).__init__(name, {"users": []})
+        else:
+            super(Day, self).__init__(name)
         self.subject_database = subjects_database
         self.day = 0
 
