@@ -116,7 +116,7 @@ class Day(JsonDB):
         return min(temp), max(temp) + 1
 
 
-def all_subject_results(results, subject, class_digit) -> (dict, int):
+def all_subject_results(results: dict, subject, class_digit) -> (dict, int):
     temp = {}
     for key in results.keys():
         if subject in results[key].keys() and results[key]["class"] == class_digit:
