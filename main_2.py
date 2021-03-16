@@ -8,9 +8,11 @@ app = Flask(__name__)
 def new_db():  # по поводу этой штуки вообще не уверен
     global subjects, d
     data = request.json
-    subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
-    d = Day(str(datetime.now().date()) + ".json", subjects, {"users": []})
-    return 0
+    if data["is_admin"]:
+        subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
+        d = Day(str(datetime.now().date()) + ".json", subjects, {"users": []})
+        return 0
+    return -1
 
 
 subjects = JsonDB("subjects.json")
