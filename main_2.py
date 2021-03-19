@@ -1,8 +1,10 @@
-from flask import Flask, request
+from copy import deepcopy
+from flask import Flask, request, jsonify
 from Utilities import *
 from datetime import datetime
 
 app = Flask(__name__)
+app.config["JSON_AS_ASCII"] = False
 
 
 def new_db(data: dict):  # по поводу этой штуки вообще не уверен
@@ -32,11 +34,20 @@ def users():
     :return: JSON с пользователями; 0; error
     """
     if request.method == "GET":
-        return d
+        return jsonify(d)
     else:
         data = request.data
         xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
         return "0"
+
+
+@app.route("/users_sum")
+def all_sum():
+    result = {'users': deepcopy(d['users'])}
+    for i in result['users']:
+        i['result'] = sum([int(k[1]) for j in i['days'] for k in j.values()])
+        del i['days']
+    return jsonify(result)
 
 
 @app.route("/add_result/<int:user_id>", methods=["POST"])
@@ -107,7 +118,7 @@ def add_admin():
     return "-1"
 
 
-@app.route("/remove_admin")
+@app.route("/remove_admin", methods=['POST'])
 def remove_admin():
     data = request.get_json()
     try:
@@ -130,4 +141,4 @@ def add_subject():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="192.168.1.85", port=5050)
