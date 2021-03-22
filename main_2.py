@@ -98,8 +98,8 @@ def add_user():
 def check_admins():
     data = request.get_json()
     if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["admins"])):
-        return {"access": True}
-    return {"access": False}
+        return {"data": {"access": True}}
+    return {"data": {"access": False}}
 
 
 @app.route("/new_db", methods=["POST"])
