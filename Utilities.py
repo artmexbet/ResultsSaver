@@ -165,7 +165,7 @@ def recount(day: Day, all_subjects: JsonDB) -> int:
                 else:
                     percent = all_subjects[subject][1] / 200
                 for i, val in subject_result.items():
-                    day["users"][user_id]["days"][day.day][subject][1] = val / percent
+                    day["users"][user_id]["days"][day.day][subject][1] = round(val / percent, 1)
                 day.commit()
     return 1
 
