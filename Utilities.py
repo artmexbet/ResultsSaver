@@ -64,7 +64,7 @@ class JsonDB(dict):
 
 
 class Day(JsonDB):
-    def __init__(self, name, subjects_database: dict):
+    def __init__(self, name, subjects_database: dict, data: dict = None):
         """
         Класс для работы с участниками. Для каждого года
         создаётся новая база данных (возможно скопируем эту, только без данных).
@@ -74,7 +74,10 @@ class Day(JsonDB):
         """
         directory = f"databases/{name}"
         if not os.path.exists(directory):
-            super(Day, self).__init__(name, {"users": []})
+            if data:
+                super(Day, self).__init__(name, data)
+            else:
+                super(Day, self).__init__(name, {"users": []})
         else:
             super(Day, self).__init__(name)
         self.subject_database = subjects_database
@@ -105,6 +108,11 @@ class Day(JsonDB):
             self.day = new_day
         else:
             self.day += 1
+
+    def find_item_with_id(self, id: int) -> dict:
+        for i in range(len(self["users"])):
+            if id == self["users"][i]["id"]:
+                return self["users"][i]
 
     @property
     def results(self) -> dict:
