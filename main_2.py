@@ -17,7 +17,7 @@ def new_db(data: dict):  # по поводу этой штуки вообще н
 
 
 subjects = JsonDB("subjects.json")
-d = Day("test.json", subjects)
+d = Day("test1.json", subjects)
 admins = JsonDB("admins.json", {})
 
 
@@ -38,7 +38,8 @@ def users():
     else:
         data = request.data
         xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
-        return "0"
+        json_from_xlsx(xlsx_file, d)
+        return {"verdict": "ok"}, 200
 
 
 @app.route("/users_sum")
@@ -47,7 +48,7 @@ def all_sum():
     for i in result['users']:
         i['result'] = sum([int(k[1]) for j in i['days'] for k in j.values()])
         del i['days']
-    return jsonify(result)
+    return jsonify(result), 200
 
 
 @app.route("/add_result/<int:user_id>", methods=["POST"])

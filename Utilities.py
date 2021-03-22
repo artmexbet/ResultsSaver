@@ -2,12 +2,14 @@ import openpyxl
 import json
 import os
 
+from openpyxl import Workbook
+
 
 class SubjectIsAlreadyExists(Exception):
     pass
 
 
-def save_xlsx_file(filename, byte_data):
+def save_xlsx_file(filename, byte_data) -> Workbook:
     """
     Функция создаёт xlsx файл из полученного массива байт.
     :param filename: Имя файла, в котоырй будет сохранён массив байт
@@ -92,11 +94,11 @@ class Day(JsonDB):
                     self["users"][student_id - 1]['days'][self.day][subject] = [score, -1]
                 except IndexError:
                     self["users"][student_id - 1]['days'].append({subject: [score, -1]})
-                return 0  # Всё прошло успешно
+                return {"verdict": "ok"}  # Всё прошло успешно
             else:
-                return 2  # Этого предмета в этот день нет
+                return {"verdict": "This subject doesn't exist today"}  # Этого предмета в этот день нет
         else:
-            return 1  # Такого предмета не существует
+            return {"verdict": "This subject doesn't exist"}  # Такого предмета не существует
 
     def set_day(self, new_day=None):
         if new_day:
@@ -118,6 +120,27 @@ class Day(JsonDB):
     def classes_count(self) -> tuple:
         temp = {self["users"][index]["class"] for index in range(len(self["users"]))}
         return min(temp), max(temp) + 1
+
+
+def json_from_xlsx(file: Workbook, days: Day):
+    wb = file.active
+    for i in list(wb.rows)[1::]:
+        student_id, name, stage, *rubbish = [k.value for k in i]
+        if not name:
+            continue
+        try:
+            class_digit = int(stage[:-1])
+            class_letter = stage[-1]
+        except TypeError:
+            class_digit = stage
+            class_letter = ""
+        days["users"].append({
+            "id": int(student_id),
+            "name": name,
+            "class": class_digit,
+            "class_letter": class_letter,
+            "days": []})
+    days.commit()
 
 
 def all_subject_results(results: dict, subject, class_digit) -> (dict, int):
