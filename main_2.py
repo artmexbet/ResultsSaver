@@ -2,9 +2,12 @@ from copy import deepcopy
 from flask import Flask, request, jsonify
 from Utilities import *
 from datetime import datetime
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
+cors = CORS(app)
 
 
 def new_db(data: dict):  # по поводу этой штуки вообще не уверен
@@ -22,6 +25,8 @@ admins = JsonDB("admins.json", {})
 
 
 @app.route("/")
+@cross_origin()
+
 def main():
     return "Это backend часть этого сайта"
 
