@@ -16,7 +16,7 @@ def new_db(data: dict):
         subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
         d = Day(str(datetime.now().date()) + ".json", subjects)
         return {"verdict": "ok"}, 200
-    return {"error": "You aren't admin"}, 400
+    return {"error": "You aren't admin"}, 401
 
 
 subjects = JsonDB("subjects.json")
@@ -67,7 +67,7 @@ def replace_results():
         del data["is_admin"]
         d = Day(d.directory.split("/")[1], subjects, data)
         return {"verdict": "ok"}, 200
-    return {"error": "You haven't admin's roots"}, 400
+    return {"error": "You haven't admin's roots"}, 401
 
 
 @app.route("/users/<int:id>", methods=["PATCH"])
@@ -86,7 +86,7 @@ def patch_results(id):
         else:
             return {"verdict": "ok"}, 200
     else:
-        return {"error": "No such id in database"}, 400
+        return {"error": "No such id in database"}, 404
 
 
 @app.route("/users_sum")
@@ -112,7 +112,7 @@ def add_result(user_id):
         student = d.find_item_with_id(user_id)
         if student["class"] == data["class"] and subjects[data["subject"]][2] == student["class"]:
             return d.add_result(user_id, data["subject"], data["score"]), 200
-    return {"error": "You aren't admin!"}, 400
+    return {"error": "You aren't admin!"}, 401
 
 
 @app.route("/test_for_correct", methods=["POST"])
@@ -136,7 +136,7 @@ def recount_main():
     if data["is_admin"]:
         recount(d, subjects)
         return {"verdict": "ok"}, 200
-    return {"error": "You aren't admin"}, 400
+    return {"error": "You aren't admin"}, 401
 
 
 @app.route("/add_user", methods=["POST"])
@@ -172,7 +172,7 @@ def add_admin():
         admins["admins"].append(data)
         admins.commit()
         return {"verdict": "ok"}, 200
-    return {"error": "You aren't admin"}, 400
+    return {"error": "You aren't admin"}, 401
 
 
 @app.route("/remove_admin", methods=['POST'])
@@ -228,7 +228,7 @@ def delete_user():
             a = d.find_item_with_id(data["id"])
             del a
             return {"verdict": "ok"}, 200
-        return {"error": "BadRequest"}, 400
+        return {"error": "You aren't admin"}, 401
     except Exception as ex:
         print(ex)
         return {"error": "BadRequest"}, 400
