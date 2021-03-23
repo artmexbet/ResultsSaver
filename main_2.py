@@ -30,21 +30,34 @@ def main():
     return "Это backend часть этого сайта"
 
 
-@app.route("/users", methods=["GET", "POST"])
+@app.route("/users", methods=["POST"])
 def users():
     """
     При POST запросе этот route запишет в бд людей,
     При GET запросе вернёт json файл с всеми пользователями
     :return: JSON с пользователями; 0; error
     """
-    if request.method == "GET":
-        return jsonify(d)
-    else:
-        data = request.data
-        xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
-        json_from_xlsx(xlsx_file, d)
-        # sorting(d)
-        return {"verdict": "ok"}, 200
+    data = request.data
+    xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
+    json_from_xlsx(xlsx_file, d)
+    # sorting(d)
+    return {"verdict": "ok"}, 200
+
+
+@app.route("/users/<int:day>")
+def users_per_day(day):
+    temp_data = Day("test1.json", subjects)
+    try:
+        for i in range(len(temp_data["users"])):
+            try:
+                temp_data["users"][i]["results"] = temp_data["users"][i]["days"][day]
+            except IndexError:
+                temp_data["users"][i]["results"] = []
+            del temp_data["users"][i]["days"]
+        return temp_data
+    except Exception as ex:
+        print(ex)
+        return {"error": "BadRequest"}, 400
 
 
 @app.route("/replace_results", methods=["PUT"])
@@ -95,7 +108,12 @@ def add_result(user_id):
     """
     # Пример запроса в файле result_example.json
     data = request.get_json()
-    return d.add_result(user_id, data["subject"], data["score"])
+    if data["is_admin"]:
+        data = data["data"]
+        student = d.find_item_with_id(user_id)
+        if student["class"] == data["class"] and subjects[data["subject"]][2] == student["class"]:
+            return d.add_result(user_id, data["subject"], data["score"])
+    return {"error": "You aren't admin!"}
 
 
 @app.route("/test_for_correct", methods=["POST"])
@@ -174,6 +192,11 @@ def add_subject():
         subjects[data["subject"]] = data["values"]
         return {"status": 0}
     return {"status": -1}
+
+
+@app.route("/subjects")
+def subjects():
+    return subjects
 
 
 if __name__ == '__main__':
