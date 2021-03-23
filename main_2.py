@@ -10,13 +10,13 @@ app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
 
 
-def new_db(data: dict):  # по поводу этой штуки вообще не уверен
+def new_db(data: dict):
     global subjects, d
     if data["is_admin"]:
         subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
         d = Day(str(datetime.now().date()) + ".json", subjects)
-        return "0"
-    return "-1"
+        return {"verdict": "ok"}, 200
+    return {"error": "You aren't admin"}, 400
 
 
 subjects = JsonDB("subjects.json")
@@ -111,8 +111,8 @@ def add_result(user_id):
         data = data["data"]
         student = d.find_item_with_id(user_id)
         if student["class"] == data["class"] and subjects[data["subject"]][2] == student["class"]:
-            return d.add_result(user_id, data["subject"], data["score"])
-    return {"error": "You aren't admin!"}
+            return d.add_result(user_id, data["subject"], data["score"]), 200
+    return {"error": "You aren't admin!"}, 400
 
 
 @app.route("/test_for_correct", methods=["POST"])
@@ -120,13 +120,13 @@ def search():
     data = request.get_json()
     """Пример json в файле example.json"""
     if not any(map(lambda x: x == data['id'], d["users"])):
-        return "3"  # Ошибка идентификатора
+        return {"error": "This id doesn't exist"}, 400  # Ошибка идентификатора
     elif data["subject"] not in subjects.keys():
-        return "1"  # Такого предмета не существует
+        return {"error": "This subject doesn't exist"}, 400  # Такого предмета не существует
     elif data["score"] not in range(subjects[data["subject"]][1] + 1):
-        return "4"  # Невозможные баллы
+        return {"error": "Unbelievable score"}, 400  # Невозможные баллы
     else:
-        return "0"  # Всё прошло успешно
+        return {"verdict": "ok"}, 200  # Всё прошло успешно
 
 
 @app.route("/recount", methods=["POST"])
@@ -135,8 +135,8 @@ def recount_main():
     data = request.get_json()
     if data["is_admin"]:
         recount(d, subjects)
-        return "0"
-    return "-1"
+        return {"verdict": "ok"}, 200
+    return {"error": "You aren't admin"}, 400
 
 
 @app.route("/add_user", methods=["POST"])
@@ -144,15 +144,19 @@ def add_user():
     data = request.get_json()
     d["users"].append(data)
     sorting(d)
-    return "0"
+    return {"verdict": "ok"}, 200
 
 
 @app.route("/check_admins", methods=["POST"])
 def check_admins():
     data = request.get_json()
-    if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["admins"])):
-        return {"data": {"access": True}}
-    return {"data": {"access": False}}
+    try:
+        if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["admins"])):
+            return {"data": {"access": True}}, 200
+        return {"data": {"access": False}}, 200
+    except Exception as ex:
+        print(ex)
+        return {"error": "BadRequest"}, 400
 
 
 @app.route("/new_db", methods=["POST"])
@@ -167,8 +171,8 @@ def add_admin():
         data.pop("is_admin")
         admins["admins"].append(data)
         admins.commit()
-        return "0"
-    return "-1"
+        return {"verdict": "ok"}, 200
+    return {"error": "You aren't admin"}, 400
 
 
 @app.route("/remove_admin", methods=['POST'])
@@ -180,8 +184,10 @@ def remove_admin():
                 break
         admins["admins"].remove(i)
         admins.commit()
+        return {"verdict": "ok"}, 200
     except Exception as ex:
-        return str(ex)
+        print(ex)
+        return {"error": "BadRequest"}, 400
 
 
 @app.route("/add_subject", methods=["POST"])
@@ -189,8 +195,8 @@ def add_subject():
     data = request.get_json()
     if data["subject"] not in subjects.keys():
         subjects[data["subject"]] = data["values"]
-        return {"status": 0}
-    return {"status": -1}
+        return {"verdict": "ok"}, 200
+    return {"error": "BadRequest"}, 400
 
 
 @app.route("/users/betters/<class_dig>")
@@ -205,12 +211,27 @@ def betters_students_from_class(class_dig):
 def betters_student_from_subject(subject):
     if not isinstance(subject, str) and subject not in subjects.keys():
         return {"error": "BadRequest"}, 400
-    return d.find_item_with_subjects(subject)
+    return d.find_item_with_subjects(subject), 200
 
 
 @app.route("/subjects")
 def subjects():
-    return subjects
+    return subjects, 200
+
+
+@app.route("/delete_user", methods=["DELETE"])
+def delete_user():
+    data = request.get_json()
+    try:
+        if data["is_admin"]:
+            data = data["data"]
+            a = d.find_item_with_id(data["id"])
+            del a
+            return {"verdict": "ok"}, 200
+        return {"error": "BadRequest"}, 400
+    except Exception as ex:
+        print(ex)
+        return {"error": "BadRequest"}, 400
 
 
 if __name__ == '__main__':
