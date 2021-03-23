@@ -33,8 +33,7 @@ def main():
 @app.route("/users", methods=["POST"])
 def users():
     """
-    При POST запросе этот route запишет в бд людей,
-    При GET запросе вернёт json файл с всеми пользователями
+    Этот route записывает в бд людей
     :return: JSON с пользователями; 0; error
     """
     data = request.data
@@ -94,9 +93,9 @@ def patch_results(id):
 def all_sum():
     result = {'users': deepcopy(d['users'])}
     for i in result['users']:
-        i['result'] = sum([int(k[1]) for j in i['days'] for k in j.values()])
+        i['result'] = student_sum(i)
         del i['days']
-    return jsonify(result), 200
+    return result, 200
 
 
 @app.route("/add_result/<int:user_id>", methods=["POST"])
@@ -106,7 +105,7 @@ def add_result(user_id):
     :param user_id: id пользователя, которому будут добавлены баллы
     :return: Прога вернёт вердикт, в нормальном положении это что-то вроде "ok"
     """
-    # Пример запроса в файле result_example.json
+    # Пример запроса в файле add_result.json
     data = request.get_json()
     if data["is_admin"]:
         data = data["data"]
@@ -192,6 +191,21 @@ def add_subject():
         subjects[data["subject"]] = data["values"]
         return {"status": 0}
     return {"status": -1}
+
+
+@app.route("/users/betters/<class_dig>")
+def betters_students_from_class(class_dig):
+    if class_dig not in range(5, 10) and not isinstance(class_dig, int):
+        return {"error": "BadRequest"}, 400
+    all_this_class_students = d.find_item_with_class(class_dig)
+    return {"data": sorted(all_this_class_students, key=lambda x: student_sum(x))}, 200
+
+
+@app.route("/users/betters/<subject>")
+def betters_student_from_subject(subject):
+    if not isinstance(subject, str) and subject not in subjects.keys():
+        return {"error": "BadRequest"}, 400
+    return d.find_item_with_subjects(subject)
 
 
 @app.route("/subjects")

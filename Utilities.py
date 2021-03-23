@@ -114,6 +114,18 @@ class Day(JsonDB):
             if id == self["users"][i]["id"]:
                 return self["users"][i]
 
+    def find_item_with_class(self, class_dig: int) -> list:
+        if class_dig not in range(5, 10):
+            raise IndexError(f"Class digit must be in range(5, 10), not {class_dig}")
+        return list(filter(lambda x: x["class"] == class_dig, self["users"]))
+
+    def find_item_with_subjects(self, subject: str) -> list:
+        temp = list(filter(lambda x: subject in [k for i in x["days"] for k in i.keys()], self["users"]))
+        for i, student in enumerate(temp):
+            subjects = {k[0]: k[1] for i in student["days"] for k in i.items()}
+            temp[i][subject] = subjects[subject]
+        return temp
+
     @property
     def results(self) -> dict:
         """Эта штуковина возвращает результаты участников по id и классам"""
@@ -159,6 +171,10 @@ def all_subject_results(results: dict, subject, class_digit) -> (dict, int):
     if not len(temp):
         return 5
     return temp
+
+
+def student_sum(student: dict) -> int:
+    return sum([int(k[1]) for j in student['days'] for k in j.values()])
 
 
 def recount(day: Day, all_subjects: JsonDB) -> int:
