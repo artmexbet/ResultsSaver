@@ -26,7 +26,6 @@ admins = JsonDB("admins.json", {})
 
 @app.route("/")
 @cross_origin()
-
 def main():
     return "Это backend часть этого сайта"
 
@@ -44,6 +43,7 @@ def users():
         data = request.data
         xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
         json_from_xlsx(xlsx_file, d)
+        # sorting(d)
         return {"verdict": "ok"}, 200
 
 
@@ -177,4 +177,4 @@ def add_subject():
 
 
 if __name__ == '__main__':
-    app.run(host="192.168.1.85", port=5050)
+    app.run()

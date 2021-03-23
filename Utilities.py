@@ -1,8 +1,8 @@
-import openpyxl
 import json
 import os
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
+from random import randint
 
 
 class SubjectIsAlreadyExists(Exception):
@@ -21,7 +21,7 @@ def save_xlsx_file(filename, byte_data) -> Workbook:
     directory = f"temp_files/{filename}"
     with open(directory, "wb") as file:
         file.write(byte_data)
-    return openpyxl.load_workbook(directory)
+    return load_workbook(directory)
 
 
 class JsonDB(dict):
@@ -132,20 +132,20 @@ class Day(JsonDB):
 
 def json_from_xlsx(file: Workbook, days: Day):
     wb = file.active
-    for i in list(wb.rows)[1::]:
-        student_id, name, stage, *rubbish = [k.value for k in i]
+    for i, elem in enumerate(list(wb.rows)[1::], 1):
+        student_id, name, stage, *rubbish = [k.value for k in elem]
         if not name:
             continue
         try:
-            class_digit = int(stage[:-1])
+            class_digit = stage[:-1]
             class_letter = stage[-1]
         except TypeError:
             class_digit = stage
             class_letter = ""
         days["users"].append({
-            "id": int(student_id),
+            "id": i,
             "name": name,
-            "class": class_digit,
+            "class": int(class_digit),
             "class_letter": class_letter,
             "days": []})
     days.commit()
@@ -179,7 +179,7 @@ def recount(day: Day, all_subjects: JsonDB) -> int:
 
 
 def sorting(day: Day):
-    day["users"].sort(lambda x: x["id"])
+    day["users"].sort(key=lambda x: x["id"])
     day.commit()
 
 
