@@ -9,7 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/venv2" />
       <excludeFolder url="file://$MODULE_DIR$/venv3" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.9 (Project)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (FlaskWeb)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="FlaskEdu" />
   </component>

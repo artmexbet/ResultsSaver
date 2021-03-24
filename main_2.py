@@ -10,7 +10,7 @@ app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
 
 
-def new_db(data: dict):
+def new_db(data: dict):  # по поводу этой штуки вообще не уверен
     global subjects, d
     if data["is_admin"]:
         subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
@@ -211,7 +211,8 @@ def betters_students_from_class(class_dig):
 def betters_student_from_subject(subject):
     if not isinstance(subject, str) and subject not in subjects.keys():
         return {"error": "BadRequest"}, 400
-    return d.find_item_with_subjects(subject), 200
+    all_this_subject_students = d.find_item_with_subjects(subject)
+    return {"data": sorted(all_this_subject_students, key=lambda x: student_sum(x))}, 200
 
 
 @app.route("/subjects")
@@ -235,4 +236,4 @@ def delete_user():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="192.168.1.85", port=5050)
