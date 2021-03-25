@@ -216,7 +216,7 @@ def betters_student_from_subject(subject):
 
 
 @app.route("/subjects")
-def subjects():
+def get_subjects():
     return subjects, 200
 
 
