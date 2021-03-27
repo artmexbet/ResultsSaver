@@ -54,6 +54,11 @@ class JsonDB(dict):
     def __str__(self):
         return self
 
+    def get_from_key(self, key):
+        for i, elem in enumerate(self["data"]):
+            if key in elem:
+                return elem[key]
+
     def commit(self):
         """
         Функция сохранения

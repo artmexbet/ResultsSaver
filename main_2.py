@@ -151,8 +151,8 @@ def add_user():
 def check_admins():
     data = request.get_json()
     try:
-        if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["admins"])):
-            return {"data": {"access": True}}, 200
+        if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["data"])):
+            return {"data": {"access": True, "speciality": admins.get_from_key("subject")}}, 200
         return {"data": {"access": False}}, 200
     except Exception as ex:
         print(ex)
