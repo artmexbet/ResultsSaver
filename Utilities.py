@@ -114,7 +114,7 @@ class Day(JsonDB):
         else:
             self.day += 1
 
-    def find_item_with_id(self, id: int) -> dict:
+    def get_item_with_id(self, id: int) -> dict:
         for i in range(len(self["users"])):
             if id == self["users"][i]["id"]:
                 return self["users"][i]
@@ -141,14 +141,25 @@ class Day(JsonDB):
         self.commit()
 
     @property
+    def get_ids(self):
+        return [i["id"] for i in self["users"]]
+
+    @property
     def results(self) -> dict:
         """Эта штуковина возвращает результаты участников по id и классам"""
         temp_results = {}
-        for index in range(len(self["users"])):
-            temp_results[index] = {"class": self["users"][index]["class"]}
-            for result in self["users"][index]["days"][self.day].keys():
-                temp_results[index][result] = self["users"][index]["days"][self.day][result][0]
+        for user_id in self.get_ids:
+            temp = self.get_item_with_id(user_id)
+            temp_results[user_id] = {"class": temp["class"]}
+            temp_days = temp["days"][self.day]
+            for result in temp_days.keys():
+                temp_results[user_id][result] = temp_days[result][0]
         return temp_results
+        # for index in range(len(self["users"])):
+        #     temp_results[index] = {"class": self["users"][index]["class"]}
+        #     for result in self["users"][index]["days"][self.day].keys():
+        #         temp_results[index][result] = self["users"][index]["days"][self.day][result][0]
+        # return temp_results
 
     @property
     def classes_count(self) -> tuple:
@@ -188,34 +199,34 @@ def json_from_xlsx(file: Workbook, days: Day):
 
 
 def all_subject_results(results: dict, subject, class_digit) -> (dict, int):
+    """Возвращает результаты всех участников по предмету (subject) из определённого класса (class_digit)"""
     temp = {}
     for key in results.keys():
         if subject in results[key].keys() and results[key]["class"] == class_digit:
             temp[key] = results[key][subject]
-    if not len(temp):
-        return 5
-    return temp
+    if temp:
+        return temp
 
 
 def student_sum(student: dict) -> int:
     return sum([int(k[1]) for j in student['days'] for k in j.values()])
 
 
-def recount(day: Day, all_subjects: JsonDB) -> int:
+def recount(day: Day, all_subjects: JsonDB) -> dict:
     for subject in all_subjects.keys():
         for class_digit in range(*day.classes_count):
             subject_result = all_subject_results(day.results, subject, class_digit)
             print(subject_result)
-            if isinstance(subject_result, dict):
+            if subject_result:
                 user_id, max_result = max(subject_result.items(), key=lambda x: x[1])
                 if max_result > all_subjects[subject][1] / 2:
                     percent = max_result / 100
                 else:
                     percent = all_subjects[subject][1] / 200
                 for i, val in subject_result.items():
-                    day["users"][user_id]["days"][day.day][subject][1] = round(val / percent, 1)
+                    day.get_item_with_id(user_id)["days"][day.day][subject][1] = round(val / percent, 1)
                 day.commit()
-    return 1
+    return {"verdict": "ok"}
 
 
 def sorting(day: Day):

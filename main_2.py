@@ -72,7 +72,7 @@ def replace_results():
 
 @app.route("/users/<int:id>", methods=["PATCH"])
 def patch_results(id):
-    item = d.find_item_with_id(id)
+    item = d.get_item_with_id(id)
     not_valid = []
     if item:
         data = request.get_json()
@@ -109,7 +109,7 @@ def add_result(user_id):
     data = request.get_json()
     if data["is_admin"]:
         data = data["data"]
-        student = d.find_item_with_id(user_id)
+        student = d.get_item_with_id(user_id)
         if student["class"] == data["class"] and subjects[data["subject"]][2] == student["class"]:
             return d.add_result(user_id, data["subject"], data["score"]), 200
     return {"error": "You aren't admin!"}, 401
@@ -225,13 +225,22 @@ def delete_user():
     try:
         if data["is_admin"]:
             data = data["data"]
-            a = d.find_item_with_id(data["id"])
+            a = d.get_item_with_id(data["id"])
             del a
             return {"verdict": "ok"}, 200
         return {"error": "You aren't admin"}, 401
     except Exception as ex:
         print(ex)
         return {"error": "BadRequest"}, 400
+
+
+@app.route("/change_day", methods=["PUT"])
+def change_day():
+    if request.get_json()["is_admin"]:
+        d.set_day(request.get_json()["new_day"])
+        return {"verdict": "ok"}, 200
+    else:
+        return {"error": "You aren't admin"}, 401
 
 
 if __name__ == '__main__':
