@@ -151,7 +151,7 @@ def check_admins():
     data = request.get_json()
     try:
         if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["data"])):
-            return {"data": {"access": 1, "speciality": admins.get_from_key("subject")}}, 200
+            return {"data": {"access": 1, "speciality": admins.get_from_key("login", data["login"])["subject"]}}, 200
         return {"data": {"access": 0}}, 200
     except Exception as ex:
         print(ex)

@@ -54,10 +54,10 @@ class JsonDB(dict):
     def __str__(self):
         return self
 
-    def get_from_key(self, key):
+    def get_from_key(self, key, value):
         for i, elem in enumerate(self["data"]):
-            if key in elem:
-                return elem[key]
+            if key in elem and elem[key] == value:
+                return self["data"][i]
 
     def commit(self):
         """
@@ -131,6 +131,7 @@ class Day(JsonDB):
             temp[i][subject] = subjects[subject]
         return temp
 
+    @property
     def get_last_id(self):
         return self["users"][-1]["id"] + 1
 
