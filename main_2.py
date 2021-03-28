@@ -142,8 +142,7 @@ def recount_main():
 @app.route("/add_user", methods=["POST"])
 def add_user():
     data = request.get_json()
-    d["users"].append(data)
-    sorting(d)
+    d.add_user(data)
     return {"verdict": "ok"}, 200
 
 

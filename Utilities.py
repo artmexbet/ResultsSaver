@@ -131,6 +131,14 @@ class Day(JsonDB):
             temp[i][subject] = subjects[subject]
         return temp
 
+    def get_last_id(self):
+        return self["users"][-1]["id"] + 1
+
+    def add_user(self, user):
+        user["id"] = self.get_last_id()
+        self["users"].append(user)
+        self.commit()
+
     @property
     def results(self) -> dict:
         """Эта штуковина возвращает результаты участников по id и классам"""
