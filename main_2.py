@@ -223,10 +223,9 @@ def get_subjects():
 def delete_user():
     data = request.get_json()
     try:
-        if data["is_admin"]:
+        if data.get("is_admin", False):
             data = data["data"]
-            a = d.get_item_with_id(data["id"])
-            del a
+            d.remove(d.get_item_with_id(data["id"]))
             return {"verdict": "ok"}, 200
         return {"error": "You aren't admin"}, 401
     except Exception as ex:
@@ -236,7 +235,7 @@ def delete_user():
 
 @app.route("/change_day", methods=["PUT"])
 def change_day():
-    if request.get_json()["is_admin"]:
+    if request.get_json().get("is_admin", False):
         d.set_day(request.get_json()["new_day"])
         return {"verdict": "ok"}, 200
     else:
