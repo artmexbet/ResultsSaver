@@ -110,7 +110,7 @@ def add_result(user_id):
     if data["is_admin"]:
         data = data["data"]
         student = d.get_item_with_id(user_id)
-        if student["class"] == data["class"] and subjects[data["subject"]][2] == student["class"]:
+        if subjects[data["subject"]][2] == student["class"]:
             return d.add_result(user_id, data["subject"], data["score"]), 200
     return {"error": "You aren't admin!"}, 401
 
@@ -216,7 +216,7 @@ def betters_student_from_subject(subject):
 
 @app.route("/subjects")
 def get_subjects():
-    return subjects, 200
+    return {"data": list(subjects.keys())}, 200
 
 
 @app.route("/delete_user", methods=["DELETE"])
@@ -240,6 +240,11 @@ def change_day():
         return {"verdict": "ok"}, 200
     else:
         return {"error": "You aren't admin"}, 401
+
+
+@app.route("/users/betters/<subject>/<int:class_d>")
+def betters_student_from_subject_n_class(subject, class_d):
+    return {"data": list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject)))}, 200
 
 
 if __name__ == '__main__':
