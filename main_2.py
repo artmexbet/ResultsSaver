@@ -4,7 +4,6 @@ from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
 
-
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
@@ -12,11 +11,9 @@ cors = CORS(app)
 
 def new_db(data: dict):  # по поводу этой штуки вообще не уверен
     global subjects, d
-    if data["is_admin"]:
-        subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
-        d = Day(str(datetime.now().date()) + ".json", subjects)
-        return {"verdict": "ok"}, 200
-    return {"error": "You aren't admin"}, 401
+    subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
+    d = Day(str(datetime.now().date()) + ".json", subjects)
+    return {"verdict": "ok"}, 200
 
 
 subjects = JsonDB("subjects.json")
@@ -63,11 +60,8 @@ def users_per_day(day):
 def replace_results():
     global d
     data = request.get_json()
-    if data["is_admin"]:
-        del data["is_admin"]
-        d = Day(d.directory.split("/")[1], subjects, data)
-        return {"verdict": "ok"}, 200
-    return {"error": "You haven't admin's roots"}, 401
+    d = Day(d.directory.split("/")[1], subjects, data)
+    return {"verdict": "ok"}, 200
 
 
 @app.route("/users/<int:id>", methods=["PATCH"])
@@ -107,12 +101,9 @@ def add_result(user_id):
     """
     # Пример запроса в файле add_result.json
     data = request.get_json()
-    if data["is_admin"]:
-        data = data["data"]
-        student = d.get_item_with_id(user_id)
-        if subjects[data["subject"]][2] == student["class"]:
-            return d.add_result(user_id, data["subject"], data["score"]), 200
-    return {"error": "You aren't admin!"}, 401
+    student = d.get_item_with_id(user_id)
+    if subjects[data["subject"]][2] == student["class"]:
+        return d.add_result(user_id, data["subject"], data["score"]), 200
 
 
 @app.route("/test_for_correct", methods=["POST"])
@@ -166,12 +157,10 @@ def route_new_db():
 @app.route("/add_admin", methods=["POST"])
 def add_admin():
     data = request.get_json()
-    if data["is_admin"]:
-        data.pop("is_admin")
-        admins["admins"].append(data)
-        admins.commit()
-        return {"verdict": "ok"}, 200
-    return {"error": "You aren't admin"}, 401
+    data.pop("is_admin")
+    admins["admins"].append(data)
+    admins.commit()
+    return {"verdict": "ok"}, 200
 
 
 @app.route("/remove_admin", methods=['POST'])
@@ -223,11 +212,8 @@ def get_subjects():
 def delete_user():
     data = request.get_json()
     try:
-        if data.get("is_admin", False):
-            data = data["data"]
-            d.remove(d.get_item_with_id(data["id"]))
-            return {"verdict": "ok"}, 200
-        return {"error": "You aren't admin"}, 401
+        d.remove(d.get_item_with_id(data["id"]))
+        return {"verdict": "ok"}, 200
     except Exception as ex:
         print(ex)
         return {"error": "BadRequest"}, 400
@@ -235,11 +221,8 @@ def delete_user():
 
 @app.route("/change_day", methods=["PUT"])
 def change_day():
-    if request.get_json().get("is_admin", False):
-        d.set_day(request.get_json()["new_day"])
-        return {"verdict": "ok"}, 200
-    else:
-        return {"error": "You aren't admin"}, 401
+    d.set_day(request.get_json()["new_day"])
+    return {"verdict": "ok"}, 200
 
 
 @app.route("/users/betters/<subject>/<int:class_d>")
