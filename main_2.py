@@ -104,6 +104,7 @@ def add_result(user_id):
     student = d.get_item_with_id(user_id)
     if subjects[data["subject"]][2] == student["class"]:
         return d.add_result(user_id, data["subject"], data["score"]), 200
+    return {"error": "Этот пользователь не может писать этот предмет"}, 400
 
 
 @app.route("/test_for_correct", methods=["POST"])
