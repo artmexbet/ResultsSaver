@@ -116,8 +116,10 @@ class Day(JsonDB):
 
     def remove(self, item):
         for i in range(len(self["users"])):
-            if self["users"][i] == item:
+            if self["users"][i]["id"] == item["id"]:
                 del self["users"][i]
+                self.commit()
+                break
 
     def get_item_with_id(self, id: int) -> dict:
         for i in range(len(self["users"])):
