@@ -102,6 +102,7 @@ class Day(JsonDB):
                     self["users"][student_id - 1]['days'][self.day][subject] = [score, -1]
                 except IndexError:
                     self["users"][student_id - 1]['days'].append({subject: [score, -1]})
+                self.commit()
                 return {"verdict": "ok"}  # Всё прошло успешно
             else:
                 return {"verdict": "This subject doesn't exist today"}  # Этого предмета в этот день нет
