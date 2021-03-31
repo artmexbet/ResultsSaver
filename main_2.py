@@ -103,7 +103,7 @@ def add_result(user_id):
     data = request.get_json()
     student = d.get_item_with_id(user_id)
     if subjects[data["subject"]][2] == student["class"]:
-        return d.add_result(user_id, data["subject"], data["score"]), 200
+        return d.add_result(user_id, data["subject"], data["score"])
     return {"error": "Этот пользователь не может писать этот предмет"}, 400
 
 

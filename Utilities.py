@@ -99,15 +99,15 @@ class Day(JsonDB):
         if subject in self.subject_database.keys():
             if self.day == self.subject_database[subject][0] - 1:
                 try:
-                    self["users"][student_id - 1]['days'][self.day][subject] = [score, -1]
+                    self.get_item_with_id(student_id)['days'][self.day][subject] = [score, -1]
                 except IndexError:
-                    self["users"][student_id - 1]['days'].append({subject: [score, -1]})
+                    self.get_item_with_id(student_id)['days'].append({subject: [score, -1]})
                 self.commit()
-                return {"verdict": "ok"}  # Всё прошло успешно
+                return {"verdict": "ok"}, 200  # Всё прошло успешно
             else:
-                return {"verdict": "This subject doesn't exist today"}  # Этого предмета в этот день нет
+                return {"verdict": "This subject doesn't exist today"}, 400  # Этого предмета в этот день нет
         else:
-            return {"verdict": "This subject doesn't exist"}  # Такого предмета не существует
+            return {"verdict": "This subject doesn't exist"}, 400  # Такого предмета не существует
 
     def set_day(self, new_day=None):
         if new_day:
