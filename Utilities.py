@@ -144,7 +144,7 @@ class Day(JsonDB):
         return self["users"][-1]["id"] + 1
 
     def add_user(self, user):
-        user["id"] = self.get_last_id()
+        user["id"] = self.get_last_id
         self["users"].append(user)
         self.commit()
 
@@ -159,7 +159,10 @@ class Day(JsonDB):
         for user_id in self.get_ids:
             temp = self.get_item_with_id(user_id)
             temp_results[user_id] = {"class": temp["class"]}
-            temp_days = temp["days"][self.day]
+            try:
+                temp_days = temp["days"][self.day].copy()
+            except IndexError:
+                temp_days = {}
             for result in temp_days.keys():
                 temp_results[user_id][result] = temp_days[result][0]
         return temp_results
@@ -224,7 +227,6 @@ def recount(day: Day, all_subjects: JsonDB) -> dict:
     for subject in all_subjects.keys():
         for class_digit in range(*day.classes_count):
             subject_result = all_subject_results(day.results, subject, class_digit)
-            print(subject_result)
             if subject_result:
                 user_id, max_result = max(subject_result.items(), key=lambda x: x[1])
                 if max_result > all_subjects[subject][1] / 2:
@@ -232,8 +234,8 @@ def recount(day: Day, all_subjects: JsonDB) -> dict:
                 else:
                     percent = all_subjects[subject][1] / 200
                 for i, val in subject_result.items():
-                    day.get_item_with_id(user_id)["days"][day.day][subject][1] = round(val / percent, 1)
-                day.commit()
+                    day.get_item_with_id(i)["days"][day.day][subject][1] = round(val / percent, 1)
+    day.commit()
     return {"verdict": "ok"}
 
 
@@ -245,5 +247,6 @@ def sorting(day: Day):
 if __name__ == '__main__':
     subjects_test = JsonDB("subjects.json")
     d_test = Day("test.json", subjects_test)
-    recount(d_test, subjects_test)
-    print(d_test.results)
+    d_test.get_item_with_id(1)["name"] = 1
+    print(d_test.get_item_with_id(1))
+    print(id(d_test["users"][0]), id(d_test.get_item_with_id(1)))

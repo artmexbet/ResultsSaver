@@ -121,14 +121,11 @@ def search():
         return {"verdict": "ok"}, 200  # Всё прошло успешно
 
 
-@app.route("/recount", methods=["POST"])
+@app.route("/recount", methods=["GET"])
 def recount_main():
     # Пример запроса смотрите в файле recount_example.json
-    data = request.get_json()
-    if data["is_admin"]:
-        recount(d, subjects)
-        return {"verdict": "ok"}, 200
-    return {"error": "You aren't admin"}, 401
+    recount(d, subjects)
+    return {"verdict": "ok"}, 200
 
 
 @app.route("/add_user", methods=["POST"])
@@ -158,7 +155,6 @@ def route_new_db():
 @app.route("/add_admin", methods=["POST"])
 def add_admin():
     data = request.get_json()
-    data.pop("is_admin")
     admins["admins"].append(data)
     admins.commit()
     return {"verdict": "ok"}, 200
@@ -229,6 +225,11 @@ def change_day():
 @app.route("/users/betters/<subject>/<int:class_d>")
 def betters_student_from_subject_n_class(subject, class_d):
     return {"data": list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject)))}, 200
+
+
+@app.route("/admins")
+def get_admins():
+    return {"data": admins}, 200
 
 
 if __name__ == '__main__':
