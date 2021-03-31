@@ -51,7 +51,7 @@ def users_per_day(day):
             try:
                 temp_data["users"][i]["results"] = temp_data["users"][i]["days"][day]
             except IndexError:
-                temp_data["users"][i]["results"] = []
+                temp_data["users"][i]["results"] = {}
             del temp_data["users"][i]["days"]
         return temp_data
     except Exception as ex:
