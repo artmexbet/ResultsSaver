@@ -210,7 +210,7 @@ def betters_student_from_subject(subject):
     if not isinstance(subject, str) and subject not in subjects.keys():
         return {"error": "BadRequest"}, 400
     all_this_subject_students = d.find_item_with_subjects(subject)
-    return {"data": sorted(all_this_subject_students, key=lambda x: student_sum(x))}, 200
+    return {"data": sorted(all_this_subject_students, key=lambda x: get_subject_result(x, subject))}, 200
 
 
 @app.route("/subjects")
@@ -237,7 +237,8 @@ def change_day():
 
 @app.route("/users/betters/<subject>/<int:class_d>")
 def betters_student_from_subject_n_class(subject, class_d):
-    return {"data": list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject)))}, 200
+    return {"data": sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
+                           key=lambda x: get_subject_result(x, subject))}, 200
 
 
 @app.route("/admins")

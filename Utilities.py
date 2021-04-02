@@ -245,6 +245,13 @@ def sorting(day: Day):
     day.commit()
 
 
+def get_subject_result(student: dict, subject: str) -> float:
+    for i in student["days"]:
+        if subject in i.keys():
+            return i[subject]
+    raise KeyError("Такого ключа не существует!")
+
+
 if __name__ == '__main__':
     subjects_test = JsonDB("subjects.json")
     d_test = Day("test.json", subjects_test)
