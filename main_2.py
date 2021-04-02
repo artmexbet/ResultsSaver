@@ -229,7 +229,7 @@ def betters_student_from_subject_n_class(subject, class_d):
 
 @app.route("/admins")
 def get_admins():
-    return admins, 200
+    return jsonify(admins), 200
 
 
 if __name__ == '__main__':
