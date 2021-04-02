@@ -65,7 +65,7 @@ def replace_results():
 
 
 @app.route("/users/<int:id>", methods=["PATCH"])
-def patch_results(id):
+def patch_users(id):
     item = d.get_item_with_id(id)
     not_valid = []
     if item:
@@ -75,12 +75,24 @@ def patch_results(id):
                 item[i[0]] = i[1]
             else:
                 not_valid.append(i)
+        d.commit()
         if not_valid:
             return {"error": {"not_valid": not_valid}}, 400
         else:
             return {"verdict": "ok"}, 200
     else:
         return {"error": "No such id in database"}, 404
+
+
+@app.route("/users/results/<int:user_id>", methods=["PATCH"])
+def patch_results(user_id):
+    changes = request.get_json()
+    student = d.get_item_with_id(user_id)
+    for change_key, change_value in changes.items():
+        for day_ind in range(len(student["days"])):
+            if change_key in student["days"][day_ind].keys():
+                student["days"][day_ind][change_key] = change_value
+    d.commit()
 
 
 @app.route("/users_sum")
@@ -180,6 +192,7 @@ def add_subject():
     data = request.get_json()
     if data["subject"] not in subjects.keys():
         subjects[data["subject"]] = data["values"]
+        subjects.commit()
         return {"verdict": "ok"}, 200
     return {"error": "BadRequest"}, 400
 
@@ -233,4 +246,4 @@ def get_admins():
 
 
 if __name__ == '__main__':
-    app.run(host="192.168.1.85", port=5050)
+    app.run()

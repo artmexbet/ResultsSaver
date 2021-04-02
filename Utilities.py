@@ -126,6 +126,7 @@ class Day(JsonDB):
         for i in range(len(self["users"])):
             if id == self["users"][i]["id"]:
                 return self["users"][i]
+        raise KeyError("Такого ключа не существует!")
 
     def find_item_with_class(self, class_dig: int) -> list:
         if class_dig not in range(5, 10):
