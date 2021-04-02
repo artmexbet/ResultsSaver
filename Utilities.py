@@ -48,8 +48,8 @@ class JsonDB(dict):
         else:
             raise KeyError("Такого ключа не существует")
 
-    def __setitem__(self, key, value):
-        self[key] = value
+    # def __setitem__(self, key, value):
+    #     self[key] = value
 
     def __str__(self):
         return self

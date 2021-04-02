@@ -167,7 +167,7 @@ def route_new_db():
 @app.route("/add_admin", methods=["POST"])
 def add_admin():
     data = request.get_json()
-    admins["admins"].append(data)
+    admins["data"].append(data)
     admins.commit()
     return {"verdict": "ok"}, 200
 
@@ -176,10 +176,10 @@ def add_admin():
 def remove_admin():
     data = request.get_json()
     try:
-        for i, elem in enumerate(admins["admins"]):
+        for i, elem in enumerate(admins["data"]):
             if elem["login"] == data["login"]:
+                admins["data"].remove(elem)
                 break
-        admins["admins"].remove(i)
         admins.commit()
         return {"verdict": "ok"}, 200
     except Exception as ex:
