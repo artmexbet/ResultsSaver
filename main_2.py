@@ -61,6 +61,15 @@ def users_per_day(day):
         return {"error": "BadRequest"}, 400
 
 
+@app.route("/get_user/<int:user_id>")
+def get_user(user_id):
+    try:
+        return {"data": d.get_item_with_id(user_id)}
+    except Exception as ex:
+        print(ex)
+        return {"error": "Такого пользователя не существует"}, 404
+
+
 @app.route("/replace_results", methods=["PUT"])
 def replace_results():
     global d
