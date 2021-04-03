@@ -48,9 +48,6 @@ class JsonDB(dict):
         else:
             raise KeyError("Такого ключа не существует")
 
-    # def __setitem__(self, key, value):
-    #     self[key] = value
-
     def __str__(self):
         return self
 
@@ -179,10 +176,64 @@ class Day(JsonDB):
         return min(temp), max(temp) + 1
 
 
-def is_data_edited(student_id: int, name, stage, days: Day) -> bool:
-    ids = [i["id"] for i in days["users"]]
+class Config:
+    def __init__(self):
+        with open("site_config.json", encoding="utf8") as config:
+            self.config = json.load(config)
+
+    @property
+    def day(self) -> int:
+        try:
+            return self.config["day"]
+        except Exception as ex:
+            print(ex)
+
+    @property
+    def current_subjects(self) -> str:
+        try:
+            return self.config["current_subjects"]
+        except Exception as ex:
+            print(ex)
+
+    @property
+    def current_students(self) -> str:
+        try:
+            return self.config["current_students"]
+        except Exception as ex:
+            print(ex)
+
+    @property
+    def current_admins(self) -> str:
+        try:
+            return self.config["current_admins"]
+        except Exception as ex:
+            print(ex)
+
+    @property
+    def configs(self) -> tuple:
+        try:
+            return self.day, self.current_subjects, self.current_students, self.current_admins
+        except Exception as ex:
+            print(ex)
+
+    def set_configs(self, **kwargs):
+        for key, value in kwargs.items():
+            if key in self.config.keys():
+                self.config[key] = value
+            else:
+                raise KeyError("Такого ключа не существует!")
+        self.commit()
+
+    def commit(self):
+        with open("site_config.json", "w") as file:
+            json.dump(self.config, file, ensure_ascii=False)
+
+
+def is_data_edited(name: str, days: Day) -> bool:
+    """Проверяет, есть ли такой человек в бд."""
+    # ids = [i["id"] for i in days["users"]]
     for i in days["users"]:
-        if (student_id == i["id"] and (name != i["name"] or stage != i["class"])) or student_id not in ids:
+        if name == i["name"]:
             return True
     return False
 
@@ -191,9 +242,7 @@ def json_from_xlsx(file: Workbook, days: Day):
     wb = file.active
     for i in list(wb.rows)[1::]:
         student_id, name, stage, *rubbish = [k.value for k in i]
-        if not is_data_edited(student_id, name, stage, days):
-            continue
-        if not name:
+        if not name or is_data_edited(name, days):
             continue
         try:
             class_digit = stage[:-1]
@@ -253,8 +302,4 @@ def get_subject_result(student: dict, subject: str) -> float:
 
 
 if __name__ == '__main__':
-    subjects_test = JsonDB("subjects.json")
-    d_test = Day("test.json", subjects_test)
-    d_test.get_item_with_id(1)["name"] = 1
-    print(d_test.get_item_with_id(1))
-    print(id(d_test["users"][0]), id(d_test.get_item_with_id(1)))
+    pass

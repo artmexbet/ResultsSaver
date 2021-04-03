@@ -7,18 +7,23 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
+config = Config()
 
 
 def new_db(data: dict):  # по поводу этой штуки вообще не уверен
     global subjects, d
-    subjects = JsonDB(f"subjects-{datetime.now().date()}.json", {})
-    d = Day(str(datetime.now().date()) + ".json", subjects)
+    subjects_name = f"subjects-{datetime.now().date()}.json"
+    subjects = JsonDB(subjects_name, {})
+    day_name = str(datetime.now().date()) + ".json"
+    d = Day(day_name, subjects)
+    config.set_configs(current_students=day_name, current_subjects=subjects_name)
     return {"verdict": "ok"}, 200
 
 
-subjects = JsonDB("subjects.json")
-d = Day("test1.json", subjects)
-admins = JsonDB("admins.json", {})
+subjects = JsonDB(config.current_subjects)
+d = Day(config.current_students, subjects)
+d.set_day(config.day)
+admins = JsonDB(config.current_admins, {})
 
 
 @app.route("/")
@@ -231,7 +236,9 @@ def delete_user():
 
 @app.route("/change_day", methods=["PUT"])
 def change_day():
-    d.set_day(request.get_json()["new_day"])
+    new_day = request.get_json()["new_day"]
+    d.set_day(new_day)
+    config.set_configs(day=new_day)
     return {"verdict": "ok"}, 200
 
 
