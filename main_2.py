@@ -109,7 +109,7 @@ def patch_results(user_id):
     d.commit()
 
 
-@app.route("/users_sum")
+@app.route("/sum")
 def all_sum():
     result = {'users': deepcopy(d['users'])}
     for i in result['users']:
