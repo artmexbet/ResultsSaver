@@ -2,15 +2,21 @@
   "data": [
     {
       "login": "artmexbet",
-      "password": "assas",
+      "password": "zxcvasdf",
       "name": "Артём",
-      "subject": "Главный"
+      "subject": "MainAdmin"
     },
     {
       "login": "JustyTry",
-      "password": "assWeCan",
+      "password": "asWeCan",
       "name": "Саша",
-      "subject": "кринжология"
+      "subject": "MainAdmin"
+    },
+    {
+      "login": "MainAdmin",
+      "password": "HsdkOrsfS",
+      "name": "ЗавУч",
+      "subject": "MainAdmin"
     }
   ]
 }

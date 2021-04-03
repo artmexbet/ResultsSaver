@@ -64,7 +64,11 @@ def users_per_day(day):
 @app.route("/get_user/<int:user_id>")
 def get_user(user_id):
     try:
-        return {"data": d.get_item_with_id(user_id)}
+        user = d.get_item_with_id(user_id).copy()
+        temp_result = {key: value[1] for day in user["days"] for key, value in day.items()}
+        user["results"] = temp_result
+        user.pop("days")
+        return {"data": user}
     except Exception as ex:
         print(ex)
         return {"error": "Такого пользователя не существует"}, 404
@@ -219,7 +223,7 @@ def add_subject():
 def betters_students_from_class(class_dig):
     if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
         return {"error": "BadRequest"}, 400
-    all_this_class_students = d.find_item_with_class(class_dig)
+    all_this_class_students = d.get_items_with_class(class_dig)
     return {"data": sorted(all_this_class_students, key=lambda x: student_sum(x))}, 200
 
 
