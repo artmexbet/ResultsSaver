@@ -3,6 +3,7 @@ import json
 import os
 
 from openpyxl import Workbook
+from random import shuffle
 
 
 class SubjectIsAlreadyExists(Exception):
@@ -240,6 +241,8 @@ def is_data_edited(name: str, days: Day) -> bool:
 
 def json_from_xlsx(file: Workbook, days: Day):
     wb = file.active
+    student_i = list(range(1000, 50000))
+    shuffle(student_i)
     for i in list(wb.rows)[1::]:
         student_id, name, stage, *rubbish = [k.value for k in i]
         if not name or is_data_edited(name, days):
@@ -251,7 +254,7 @@ def json_from_xlsx(file: Workbook, days: Day):
             class_digit = stage
             class_letter = ""
         days["users"].append({
-            "id": i,
+            "id": student_i[i],
             "name": name,
             "class": int(class_digit),
             "class_letter": class_letter,
@@ -302,4 +305,6 @@ def get_subject_result(student: dict, subject: str) -> float:
 
 
 if __name__ == '__main__':
-    pass
+    subjects = JsonDB("subjects.json")
+    d = Day("test1.json", subjects)
+    print(d.get_item_with_id(899))
