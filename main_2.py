@@ -127,10 +127,14 @@ def add_result(user_id):
     """
     # Пример запроса в файле add_result.json
     data = request.get_json()
-    student = d.get_item_with_id(user_id)
-    if subjects[data["subject"]][2] == student["class"]:
-        return d.add_result(user_id, data["subject"], data["score"])
-    return {"error": "Этот пользователь не может писать этот предмет"}, 400
+    try:
+        student = d.get_item_with_id(user_id)
+        if subjects[data["subject"]][2] == student["class"]:
+            return d.add_result(user_id, data["subject"], data["score"])
+        return {"error": "Этот пользователь не может писать этот предмет"}, 400
+    except Exception as ex:
+        print(ex)
+        return {"error": str(ex)}, 400
 
 
 @app.route("/test_for_correct", methods=["POST"])
@@ -213,7 +217,7 @@ def add_subject():
 
 @app.route("/users/betters/<class_dig>")
 def betters_students_from_class(class_dig):
-    if class_dig not in range(5, 10) and not isinstance(class_dig, int):
+    if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
         return {"error": "BadRequest"}, 400
     all_this_class_students = d.find_item_with_class(class_dig)
     return {"data": sorted(all_this_class_students, key=lambda x: student_sum(x))}, 200
