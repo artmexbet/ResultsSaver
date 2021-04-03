@@ -129,7 +129,7 @@ def add_result(user_id):
     data = request.get_json()
     try:
         student = d.get_item_with_id(user_id)
-        if subjects[data["subject"]][2] == student["class"]:
+        if student["class"] in subjects[data["subject"]][2]:
             return d.add_result(user_id, data["subject"], data["score"])
         return {"error": "Этот пользователь не может писать этот предмет"}, 400
     except Exception as ex:
