@@ -65,7 +65,7 @@ def users_per_day(day):
 def get_user(user_id):
     try:
         user = d.get_item_with_id(user_id).copy()
-        temp_result = {key: value[1] for day in user["days"] for key, value in day.items()}
+        temp_result = [{key: value[1]} for day in user["days"] for key, value in day.items()]
         user["results"] = temp_result
         user.pop("days")
         return {"data": user}

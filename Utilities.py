@@ -277,8 +277,9 @@ def student_sum(student: dict) -> int:
 
 
 def recount(day: Day, all_subjects: JsonDB) -> dict:
+    classes = day.classes_count
     for subject in all_subjects.keys():
-        for class_digit in range(*day.classes_count):
+        for class_digit in range(*classes):
             subject_result = all_subject_results(day.results, subject, class_digit)
             if subject_result:
                 user_id, max_result = max(subject_result.items(), key=lambda x: x[1])
