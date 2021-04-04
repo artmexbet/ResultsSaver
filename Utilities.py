@@ -241,8 +241,9 @@ def is_data_edited(name: str, days: Day) -> bool:
 
 def json_from_xlsx(file: Workbook, days: Day):
     wb = file.active
-    student_i = list(range(1000, 50000))
-    shuffle(student_i)
+    # student_i = list(range(1000, 50000))
+    # shuffle(student_i)
+    days["users"] = []
     for i in list(wb.rows)[1::]:
         student_id, name, stage, *rubbish = [k.value for k in i]
         if not name or is_data_edited(name, days):
@@ -254,11 +255,12 @@ def json_from_xlsx(file: Workbook, days: Day):
             class_digit = stage
             class_letter = ""
         days["users"].append({
-            "id": student_i[i],
+            "id": student_id,
             "name": name,
             "class": int(class_digit),
             "class_letter": class_letter,
             "days": []})
+        print("ok")
     days.commit()
 
 
