@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify
 from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
+from waitress import serve
+
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
@@ -281,4 +283,5 @@ def better_teams():
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    serve(app)
