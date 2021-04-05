@@ -263,13 +263,17 @@ def change_day():
 
 @app.route("/users/betters/<subject>/<int:class_d>")
 def betters_student_from_subject_n_class(subject, class_d):
-    return {"data": sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
-                           key=lambda x: -get_subject_result(x, subject))[:20]}, 200
+    temp = sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
+                           key=lambda x: -get_subject_result(x, subject))[:20]
+    for user_id in range(len(temp)):
+        temp[user_id]["result"] = sum(temp[user_id]["results"].values())
+        temp["user_id"].pop("results")
+    return {"data": temp}, 200
 
 
 @app.route("/users/betters")
 def betters():
-    return {"data": sorted(convert_to_betters(d["users"]), key=lambda x: -sum(x["results"].values()))}
+    return {"data": sorted(convert_to_betters(d["users"])[20:], key=lambda x: -sum(x["results"].values()))}
 
 
 @app.route("/admins")
