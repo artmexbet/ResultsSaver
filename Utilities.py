@@ -170,6 +170,19 @@ class Day(JsonDB):
         temp = {self["users"][index]["class"] for index in range(len(self["users"]))}
         return min(temp), max(temp) + 1
 
+    @property
+    def count_teams(self):
+        teams = {}
+        betters_users = convert_to_betters(self["users"])
+        for user in betters_users:
+            if user["team"]:
+                try:
+                    teams[user["team"]] += sum(user["results"].values())
+                except Exception as ex:
+                    print(ex)
+                    teams[user["team"]] = sum(user["results"].values())
+        return [{"team_name": key, "team_results": value} for key, value in sorted(teams.items(), key=lambda x: -x[1])]
+
 
 class Config:
     def __init__(self):
@@ -307,7 +320,7 @@ def convert_to_betters(users: list) -> list:
     day = deepcopy(users)
     for user_ind in range(len(day)):
         results = sorted(
-            {subject: result for users_day in day[user_ind] for subject, result in users_day.items()}.items(),
+            {subject: result[1] for users_day in day[user_ind]["days"] for subject, result in users_day.items()}.items(),
             key=lambda x: -x[1])
         day[user_ind].pop("days")
         day[user_ind]["results"] = {key: value for key, value in results}

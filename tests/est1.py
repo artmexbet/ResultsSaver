@@ -4,4 +4,4 @@ import requests
 # print(data.json())
 # data = requests.put("http://127.0.0.1:5000/change_day", json={"new_day": 1})
 data = requests.get("http://127.0.0.1:5000/users/betters")
-print(data)
+print(data.json())

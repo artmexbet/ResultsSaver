@@ -224,7 +224,7 @@ def betters_students_from_class(class_dig):
     if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
         return {"error": "BadRequest"}, 400
     all_this_class_students = convert_to_betters(d.get_items_with_class(class_dig))
-    return {"data": sorted(all_this_class_students, key=lambda x: -student_sum(x))[:20]}, 200
+    return {"data": sorted(all_this_class_students, key=lambda x: -sum(x["results"].values()))[:20]}, 200
 
 
 @app.route("/users/betters/<subject>")
@@ -261,13 +261,13 @@ def change_day():
 
 @app.route("/users/betters/<subject>/<int:class_d>")
 def betters_student_from_subject_n_class(subject, class_d):
-    return {"data": sorted(list(filter(lambda x: x["class"] == class_d, convert_to_betters(betters_student_from_subject(subject)))),
+    return {"data": sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
                            key=lambda x: -get_subject_result(x, subject))[:20]}, 200
 
 
 @app.route("/users/betters")
 def betters():
-    return {"data": sorted(convert_to_betters(d["users"]), key=lambda x: -student_sum(x))}
+    return {"data": sorted(convert_to_betters(d["users"]), key=lambda x: -sum(x["results"].values()))}
 
 
 @app.route("/admins")
@@ -277,7 +277,7 @@ def get_admins():
 
 @app.route("/users/betters/teams")
 def better_teams():
-    pass
+    return {"data": d.count_teams}
 
 
 if __name__ == '__main__':
