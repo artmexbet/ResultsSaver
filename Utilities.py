@@ -95,8 +95,8 @@ class Day(JsonDB):
         :return:
         """
         if subject in self.subject_database.keys():
-            if self.day == self.subject_database[subject][0]:
-                student['days'][self.day - 1][subject] = [score, -1]
+            if self.day == self.subject_database[subject][0] - 1:
+                student['days'][self.day][subject] = [score, -1]
                 self.commit()
                 return {"verdict": "ok"}, 200  # Всё прошло успешно
             else:
