@@ -22,7 +22,7 @@ def new_db(data: dict):  # по поводу этой штуки вообще н
 
 subjects = JsonDB(config.current_subjects)
 d = Day(config.current_students, subjects)
-d.set_day(config.day)
+d.set_day(new_day=config.day)
 admins = JsonDB(config.current_admins, {})
 
 
@@ -134,7 +134,7 @@ def add_result(user_id):
     try:
         student = d.get_item_with_id(user_id)
         if student["class"] in subjects[data["subject"]][2]:
-            return d.add_result(user_id, data["subject"], data["score"])
+            return d.add_result(user_id, data["subject"], data["score"], student)
         return {"error": "Этот пользователь не может писать этот предмет"}, 400
     except Exception as ex:
         print(ex)
@@ -254,7 +254,7 @@ def delete_user():
 @app.route("/change_day", methods=["PUT"])
 def change_day():
     new_day = request.get_json()["new_day"]
-    d.set_day(new_day)
+    d.set_day(new_day=new_day)
     config.set_configs(day=new_day)
     return {"verdict": "ok"}, 200
 

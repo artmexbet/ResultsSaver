@@ -86,7 +86,7 @@ class Day(JsonDB):
         self.subject_database = subjects_database
         self.day = 0
 
-    def add_result(self, student_id: int, subject: str, score: int):
+    def add_result(self, student_id: int, subject: str, score: int, student: dict):
         """
         Этот метод присваивает пользователю результат
         :param student_id: id студента
@@ -95,11 +95,8 @@ class Day(JsonDB):
         :return:
         """
         if subject in self.subject_database.keys():
-            if self.day == self.subject_database[subject][0] - 1:
-                try:
-                    self.get_item_with_id(student_id)['days'][self.day][subject] = [score, -1]
-                except IndexError:
-                    self.get_item_with_id(student_id)['days'].append({subject: [score, -1]})
+            if self.day == self.subject_database[subject][0]:
+                student['days'][self.day - 1][subject] = [score, -1]
                 self.commit()
                 return {"verdict": "ok"}, 200  # Всё прошло успешно
             else:
@@ -259,7 +256,7 @@ def json_from_xlsx(file: Workbook, days: Day):
             "name": name,
             "class": int(class_digit),
             "class_letter": class_letter,
-            "days": []})
+            "days": [{}, {}]})
         print("ok")
     days.commit()
 
