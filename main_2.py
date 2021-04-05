@@ -267,7 +267,7 @@ def betters_student_from_subject_n_class(subject, class_d):
                            key=lambda x: -get_subject_result(x, subject))[:20]
     for user_id in range(len(temp)):
         temp[user_id]["result"] = sum(temp[user_id]["results"].values())
-        temp["user_id"].pop("results")
+        temp[user_id].pop("results")
     return {"data": temp}, 200
 
 
