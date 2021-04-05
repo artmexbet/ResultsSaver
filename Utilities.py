@@ -3,7 +3,7 @@ import json
 import os
 
 from openpyxl import Workbook
-from random import shuffle
+from copy import deepcopy
 
 
 class SubjectIsAlreadyExists(Exception):
@@ -105,7 +105,7 @@ class Day(JsonDB):
             return {"verdict": "This subject doesn't exist"}, 400  # Такого предмета не существует
 
     def set_day(self, new_day=None):
-        if new_day:
+        if new_day is not None:
             self.day = new_day
         else:
             self.day += 1
@@ -155,12 +155,9 @@ class Day(JsonDB):
         for user_id in self.get_ids:
             temp = self.get_item_with_id(user_id)
             temp_results[user_id] = {"class": temp["class"]}
-            try:
-                temp_days = temp["days"][self.day].copy()
-            except IndexError:
-                temp_days = {}
-            for result in temp_days.keys():
-                temp_results[user_id][result] = temp_days[result][0]
+            temp_days = temp["days"][self.day].copy()
+            for subject in temp_days.keys():
+                temp_results[user_id][subject] = temp_days[subject][0]
         return temp_results
         # for index in range(len(self["users"])):
         #     temp_results[index] = {"class": self["users"][index]["class"]}
@@ -256,8 +253,8 @@ def json_from_xlsx(file: Workbook, days: Day):
             "name": name,
             "class": int(class_digit),
             "class_letter": class_letter,
-            "days": [{}, {}]})
-        print("ok")
+            "days": [{}, {}],
+            "team": ""})
     days.commit()
 
 
@@ -279,7 +276,9 @@ def recount(day: Day, all_subjects: JsonDB) -> dict:
     classes = day.classes_count
     for subject in all_subjects.keys():
         for class_digit in range(*classes):
-            subject_result = all_subject_results(day.results, subject, class_digit)
+            a = day.results
+            print(a)
+            subject_result = all_subject_results(a, subject, class_digit)
             if subject_result:
                 user_id, max_result = max(subject_result.items(), key=lambda x: x[1])
                 if max_result > all_subjects[subject][1] / 2:
@@ -302,6 +301,17 @@ def get_subject_result(student: dict, subject: str) -> float:
         if subject in i.keys():
             return i[subject]
     raise KeyError("Такого ключа не существует!")
+
+
+def convert_to_betters(users: list) -> list:
+    day = deepcopy(users)
+    for user_ind in range(len(day)):
+        results = sorted(
+            {subject: result for users_day in day[user_ind] for subject, result in users_day.items()}.items(),
+            key=lambda x: -x[1])
+        day[user_ind].pop("days")
+        day[user_ind]["results"] = {key: value for key, value in results}
+    return day
 
 
 if __name__ == '__main__':
