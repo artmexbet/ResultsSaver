@@ -265,6 +265,11 @@ def betters_student_from_subject_n_class(subject, class_d):
                            key=lambda x: -get_subject_result(x, subject))[:20]}, 200
 
 
+@app.route("/users/betters")
+def betters():
+    return {"data": sorted(d["users"], key=lambda x: student_sum(x))}
+
+
 @app.route("/admins")
 def get_admins():
     return jsonify(admins), 200
