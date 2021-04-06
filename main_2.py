@@ -6,7 +6,7 @@ from flask_cors import CORS, cross_origin
 from waitress import serve
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="build/src", template_folder="build/")
 app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
 config = Config()
@@ -31,7 +31,7 @@ admins = JsonDB(config.current_admins, {})
 @app.route("/")
 @cross_origin()
 def main():
-    return "Это backend часть этого сайта"
+    return app.send_static_file("index.html")
 
 
 @app.route("/users", methods=["POST"])
