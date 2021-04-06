@@ -35,6 +35,7 @@ def main():
 
 
 @app.route("/users", methods=["POST"])
+@cross_origin()
 def users():
     """
     Этот route записывает в бд людей
@@ -48,6 +49,7 @@ def users():
 
 
 @app.route("/users/<int:day>")
+@cross_origin()
 def users_per_day(day):
     temp_data = Day("test1.json", subjects)
     try:
@@ -64,6 +66,7 @@ def users_per_day(day):
 
 
 @app.route("/get_user/<int:user_id>")
+@cross_origin()
 def get_user(user_id):
     try:
         user = d.get_item_with_id(user_id).copy()
@@ -77,6 +80,7 @@ def get_user(user_id):
 
 
 @app.route("/replace_results", methods=["PUT"])
+@cross_origin()
 def replace_results():
     global d
     data = request.get_json()
@@ -85,6 +89,7 @@ def replace_results():
 
 
 @app.route("/users/<int:id>", methods=["PATCH"])
+@cross_origin()
 def patch_users(id):
     item = d.get_item_with_id(id)
     not_valid = []
@@ -105,6 +110,7 @@ def patch_users(id):
 
 
 @app.route("/users/results/<int:user_id>", methods=["PATCH"])
+@cross_origin()
 def patch_results(user_id):
     changes = request.get_json()
     student = d.get_item_with_id(user_id)
@@ -116,6 +122,7 @@ def patch_results(user_id):
 
 
 @app.route("/sum")
+@cross_origin()
 def all_sum():
     result = {'users': deepcopy(d['users'])}
     for i in result['users']:
@@ -125,6 +132,7 @@ def all_sum():
 
 
 @app.route("/add_result/<int:user_id>", methods=["POST"])
+@cross_origin()
 def add_result(user_id):
     """
     Здесь добавляем результаты людям
@@ -144,6 +152,7 @@ def add_result(user_id):
 
 
 @app.route("/test_for_correct", methods=["POST"])
+@cross_origin()
 def search():
     data = request.get_json()
     """Пример json в файле example.json"""
@@ -158,6 +167,7 @@ def search():
 
 
 @app.route("/recount", methods=["GET"])
+@cross_origin()
 def recount_main():
     # Пример запроса смотрите в файле recount_example.json
     recount(d, subjects)
@@ -165,6 +175,7 @@ def recount_main():
 
 
 @app.route("/add_user", methods=["POST"])
+@cross_origin()
 def add_user():
     data = request.get_json()
     d.add_user(data)
@@ -172,6 +183,7 @@ def add_user():
 
 
 @app.route("/check_admins", methods=["POST"])
+@cross_origin()
 def check_admins():
     data = request.get_json()
     try:
@@ -184,11 +196,13 @@ def check_admins():
 
 
 @app.route("/new_db", methods=["POST"])
+@cross_origin()
 def route_new_db():
     new_db(request.get_json())
 
 
 @app.route("/add_admin", methods=["POST"])
+@cross_origin()
 def add_admin():
     data = request.get_json()
     admins["data"].append(data)
@@ -197,6 +211,7 @@ def add_admin():
 
 
 @app.route("/remove_admin", methods=['POST'])
+@cross_origin()
 def remove_admin():
     data = request.get_json()
     try:
@@ -212,6 +227,7 @@ def remove_admin():
 
 
 @app.route("/add_subject", methods=["POST"])
+@cross_origin()
 def add_subject():
     data = request.get_json()
     if data["subject"] not in subjects.keys():
@@ -222,6 +238,7 @@ def add_subject():
 
 
 @app.route("/users/betters/<class_dig>")
+@cross_origin()
 def betters_students_from_class(class_dig):
     if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
         return {"error": "BadRequest"}, 400
@@ -230,6 +247,7 @@ def betters_students_from_class(class_dig):
 
 
 @app.route("/users/betters/<subject>")
+@cross_origin()
 def betters_student_from_subject(subject):
     if not isinstance(subject, str) and subject not in subjects.keys():
         return {"error": "BadRequest"}, 400
@@ -238,11 +256,13 @@ def betters_student_from_subject(subject):
 
 
 @app.route("/subjects")
+@cross_origin()
 def get_subjects():
     return {"data": list(subjects.keys())}, 200
 
 
 @app.route("/delete_user", methods=["DELETE"])
+@cross_origin()
 def delete_user():
     data = request.get_json()
     try:
@@ -254,6 +274,7 @@ def delete_user():
 
 
 @app.route("/change_day", methods=["PUT"])
+@cross_origin()
 def change_day():
     new_day = request.get_json()["new_day"]
     d.set_day(new_day=new_day)
@@ -262,6 +283,7 @@ def change_day():
 
 
 @app.route("/users/betters/<subject>/<int:class_d>")
+@cross_origin()
 def betters_student_from_subject_n_class(subject, class_d):
     temp = sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
                            key=lambda x: -get_subject_result(x, subject))[:20]
@@ -272,16 +294,19 @@ def betters_student_from_subject_n_class(subject, class_d):
 
 
 @app.route("/users/betters")
+@cross_origin()
 def betters():
     return {"data": sorted(convert_to_betters(d["users"])[20:], key=lambda x: -sum(x["results"].values()))}
 
 
 @app.route("/admins")
+@cross_origin()
 def get_admins():
     return jsonify(admins), 200
 
 
 @app.route("/users/betters/teams")
+@cross_origin()
 def better_teams():
     return {"data": d.count_teams}
 
