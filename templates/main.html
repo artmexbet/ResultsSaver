@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Главная страница{% endblock %}
+{% block body %}
+    <main class="text-center">
+        <h1>{% if day %}
+            {% if day == 1 %}Первый день{% else %}Второй день{% endif %}
+        {% else %} Странно, дня нет
+        {% endif %}
+        </h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Класс</th>
+                <th scope="col">Буква класса</th>
+                <th scope="col">Редактирование</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if users %}
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ user["id"] }}</th>
+                        <td>{{ user["name"] }}</td>
+                        <td>{{ user["class"] }}</td>
+                        <td>{{ user["class_letter"] }}</td>
+                        <td><a href="/users/{{ user["id"] }}">Подробнее</a></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </main>
+{% endblock %}

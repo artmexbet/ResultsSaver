@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\templates\main.html">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\restful.py">
           <value>
             <Attribute>

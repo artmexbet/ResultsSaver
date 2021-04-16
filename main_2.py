@@ -1,12 +1,12 @@
 from copy import deepcopy
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
 from waitress import serve
 
 
-app = Flask(__name__, static_folder="build/src", template_folder="build/")
+app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
 config = Config()
@@ -28,10 +28,25 @@ d.set_day(new_day=config.day)
 admins = JsonDB(config.current_admins, {})
 
 
+def users_per_day(day):
+    temp_data = Day("test1.json", subjects)
+    try:
+        for i in range(len(temp_data["users"])):
+            try:
+                temp_data["users"][i]["results"] = temp_data["users"][i]["days"][day]
+            except IndexError:
+                temp_data["users"][i]["results"] = {}
+            del temp_data["users"][i]["days"]
+        return temp_data['users']
+    except Exception as ex:
+        print(ex)
+        return {"error": "BadRequest"}, 400
+
+
 @app.route("/")
 @cross_origin()
 def main():
-    return app.send_static_file("index.html")
+    return render_template("main.html", day=1, users=users_per_day(0))
 
 
 @app.route("/users", methods=["POST"])
@@ -48,24 +63,7 @@ def users():
     return {"verdict": "ok"}, 200
 
 
-@app.route("/users/<int:day>")
-@cross_origin()
-def users_per_day(day):
-    temp_data = Day("test1.json", subjects)
-    try:
-        for i in range(len(temp_data["users"])):
-            try:
-                temp_data["users"][i]["results"] = temp_data["users"][i]["days"][day]
-            except IndexError:
-                temp_data["users"][i]["results"] = {}
-            del temp_data["users"][i]["days"]
-        return temp_data
-    except Exception as ex:
-        print(ex)
-        return {"error": "BadRequest"}, 400
-
-
-@app.route("/get_user/<int:user_id>")
+@app.route("/users/<int:user_id>")
 @cross_origin()
 def get_user(user_id):
     try:
@@ -73,7 +71,7 @@ def get_user(user_id):
         temp_result = [{"subject": key, "value": value[1]} for day in user["days"] for key, value in day.items()]
         user["results"] = temp_result
         user.pop("days")
-        return {"data": user}
+        return render_template("more.html", user=user)
     except Exception as ex:
         print(ex)
         return {"error": "Такого пользователя не существует"}, 404
