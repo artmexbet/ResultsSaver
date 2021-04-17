@@ -1,9 +1,8 @@
-from copy import deepcopy
 from flask import Flask, request, jsonify, render_template
 from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-from waitress import serve
+from flask_login import LoginManager, login_required
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
@@ -81,8 +80,6 @@ def get_user(day, user_id):
         return {"error": "Такого пользователя не существует"}, 404
 
 
-@app.route("/replace_results", methods=["PUT"])
-@cross_origin()
 def replace_results():
     global d
     data = request.get_json()
@@ -90,8 +87,6 @@ def replace_results():
     return {"verdict": "ok"}, 200
 
 
-@app.route("/users/<int:id>", methods=["PATCH"])
-@cross_origin()
 def patch_users(id):
     item = d.get_item_with_id(id)
     not_valid = []
@@ -111,8 +106,6 @@ def patch_users(id):
         return {"error": "No such id in database"}, 404
 
 
-@app.route("/users/results/<int:user_id>", methods=["PATCH"])
-@cross_origin()
 def patch_results(user_id):
     changes = request.get_json()
     student = d.get_item_with_id(user_id)
@@ -133,8 +126,6 @@ def all_sum():
     return result, 200
 
 
-@app.route("/add_result/<int:user_id>", methods=["POST"])
-@cross_origin()
 def add_result(user_id):
     """
     Здесь добавляем результаты людям
@@ -168,43 +159,35 @@ def search():
         return {"verdict": "ok"}, 200  # Всё прошло успешно
 
 
-@app.route("/recount", methods=["GET"])
-@cross_origin()
 def recount_main():
     # Пример запроса смотрите в файле recount_example.json
     recount(d, subjects)
     return {"verdict": "ok"}, 200
 
 
-@app.route("/add_user", methods=["POST"])
-@cross_origin()
 def add_user():
     data = request.get_json()
     d.add_user(data)
     return {"verdict": "ok"}, 200
 
 
-@app.route("/check_admins", methods=["POST"])
-@cross_origin()
-def check_admins():
-    data = request.get_json()
-    try:
-        if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["data"])):
-            return {"data": {"access": 1, "speciality": admins.get_from_key("login", data["login"])["subject"]}}, 200
-        return {"data": {"access": 0}}, 200
-    except Exception as ex:
-        print(ex)
-        return {"error": "BadRequest"}, 400
+# @app.route("/check_admins", methods=["POST"])
+# @cross_origin()
+# def check_admins():
+#     data = request.get_json()
+#     try:
+#         if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["data"])):
+#             return {"data": {"access": 1, "speciality": admins.get_from_key("login", data["login"])["subject"]}}, 200
+#         return {"data": {"access": 0}}, 200
+#     except Exception as ex:
+#         print(ex)
+#         return {"error": "BadRequest"}, 400
 
 
-@app.route("/new_db", methods=["POST"])
-@cross_origin()
 def route_new_db():
     new_db(request.get_json())
 
 
-@app.route("/add_admin", methods=["POST"])
-@cross_origin()
 def add_admin():
     data = request.get_json()
     admins["data"].append(data)
@@ -212,8 +195,6 @@ def add_admin():
     return {"verdict": "ok"}, 200
 
 
-@app.route("/remove_admin", methods=['POST'])
-@cross_origin()
 def remove_admin():
     data = request.get_json()
     try:
@@ -228,8 +209,6 @@ def remove_admin():
         return {"error": "BadRequest"}, 400
 
 
-@app.route("/add_subject", methods=["POST"])
-@cross_origin()
 def add_subject():
     data = request.get_json()
     if data["subject"] not in subjects.keys():
@@ -268,8 +247,6 @@ def get_subjects():
     return {"data": list(subjects.keys())}, 200
 
 
-@app.route("/delete_user", methods=["DELETE"])
-@cross_origin()
 def delete_user():
     data = request.get_json()
     try:
@@ -280,8 +257,6 @@ def delete_user():
         return {"error": "BadRequest"}, 400
 
 
-@app.route("/change_day", methods=["PUT"])
-@cross_origin()
 def change_day():
     new_day = request.get_json()["new_day"]
     d.set_day(new_day=new_day)
@@ -321,6 +296,12 @@ def better_teams():
 @app.route("/login")
 def login():
     pass
+
+
+@app.route("/admin")
+# @login_required
+def admin():
+    return render_template("admin.html")
 
 
 if __name__ == '__main__':
