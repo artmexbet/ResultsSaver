@@ -3,7 +3,8 @@
 {% block body %}
     <main class="text-center">
         <h1>{% if day %}
-            {% if day == 1 %}Первый день{% else %}Второй день{% endif %}
+            {% if day == 1 %}Первый день{% elif day == 2 %}Второй день{% elif day == 3 %}Лучшие в первый день
+            {% elif day == 4 %}Лучшие во второй день{% endif %}
         {% else %} Странно, дня нет
         {% endif %}
         </h1>
@@ -25,7 +26,7 @@
                         <td>{{ user["name"] }}</td>
                         <td>{{ user["class"] }}</td>
                         <td>{{ user["class_letter"] }}</td>
-                        <td><a href="/users/{{ user["id"] }}">Подробнее</a></td>
+                        <td><a href="/users/{{ day - 1 }}/{{ user["id"] }}">Подробнее</a></td>
                     </tr>
                 {% endfor %}
             {% endif %}

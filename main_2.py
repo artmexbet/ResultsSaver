@@ -5,7 +5,6 @@ from datetime import datetime
 from flask_cors import CORS, cross_origin
 from waitress import serve
 
-
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
@@ -49,6 +48,11 @@ def main():
     return render_template("main.html", day=1, users=users_per_day(0))
 
 
+@app.route("/<int:day>")
+def main_2(day):
+    return render_template("main.html", day=day + 1, users=users_per_day(day))
+
+
 @app.route("/users", methods=["POST"])
 @cross_origin()
 def users():
@@ -63,12 +67,12 @@ def users():
     return {"verdict": "ok"}, 200
 
 
-@app.route("/users/<int:user_id>")
+@app.route("/users/<int:day>/<int:user_id>")
 @cross_origin()
-def get_user(user_id):
+def get_user(day, user_id):
     try:
         user = d.get_item_with_id(user_id).copy()
-        temp_result = [{"subject": key, "value": value[1]} for day in user["days"] for key, value in day.items()]
+        temp_result = [{"subject": key, "value": value[1]} for key, value in user["days"][day].items()]
         user["results"] = temp_result
         user.pop("days")
         return render_template("more.html", user=user)
@@ -235,13 +239,18 @@ def add_subject():
     return {"error": "BadRequest"}, 400
 
 
-@app.route("/users/betters/<class_dig>")
+@app.route("/users/betters/<int:day>")
 @cross_origin()
-def betters_students_from_class(class_dig):
-    if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
+def betters_students(day):
+    if day not in range(2):
         return {"error": "BadRequest"}, 400
-    all_this_class_students = convert_to_betters(d.get_items_with_class(class_dig))
-    return {"data": sorted(all_this_class_students, key=lambda x: -sum(x["results"].values()))[:20]}, 200
+    students = sorted(d["users"].copy(), reverse=True,
+                      key=lambda x: sum(map(lambda k: k[1],
+                                            sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
+    # if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
+    #     return {"error": "BadRequest"}, 400
+    # all_this_class_students = convert_to_betters(d.get_items_with_class(class_dig))
+    return render_template("main.html", day=day + 1, users=students[:20])
 
 
 @app.route("/users/betters/<subject>")
@@ -284,7 +293,7 @@ def change_day():
 @cross_origin()
 def betters_student_from_subject_n_class(subject, class_d):
     temp = sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
-                           key=lambda x: -get_subject_result(x, subject))[:20]
+                  key=lambda x: -get_subject_result(x, subject))[:20]
     for user_id in range(len(temp)):
         temp[user_id]["result"] = sum(temp[user_id]["results"].values())
         temp[user_id].pop("results")
@@ -307,6 +316,11 @@ def get_admins():
 @cross_origin()
 def better_teams():
     return {"data": d.count_teams}
+
+
+@app.route("/login")
+def login():
+    pass
 
 
 if __name__ == '__main__':
