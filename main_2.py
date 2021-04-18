@@ -3,11 +3,26 @@ from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
 from flask_login import LoginManager, login_required
+import logging
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 cors = CORS(app)
 config = Config()
+logging.basicConfig(filename='main.log',
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s', level=logging.DEBUG)
+
+
+@app.errorhandler(500)
+def handler_500(error):
+    logging.critical("Internal Server Error")
+    return "Internal Server Error"
+
+
+@app.errorhandler(404)
+def handler_404(error):
+    logging.critical("Not Found")
+    return "Not Found"
 
 
 def new_db(data: dict):  # по поводу этой штуки вообще не уверен
@@ -35,9 +50,11 @@ def users_per_day(day):
             except IndexError:
                 temp_data["users"][i]["results"] = {}
             del temp_data["users"][i]["days"]
+        logging.info("Info was received")
         return temp_data['users']
     except Exception as ex:
         print(ex)
+        logging.error(f"An error occurred: {ex} \n during received users")
         return {"error": "BadRequest"}, 400
 
 
@@ -62,6 +79,7 @@ def users():
     data = request.data
     xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
     json_from_xlsx(xlsx_file, d)
+    logging.info("An DataBase was created by excel table")
     # sorting(d)
     return {"verdict": "ok"}, 200
 
@@ -74,9 +92,11 @@ def get_user(day, user_id):
         temp_result = [{"subject": key, "value": value[1]} for key, value in user["days"][day].items()]
         user["results"] = temp_result
         user.pop("days")
+        logging.info("Info about users was received")
         return render_template("more.html", user=user)
     except Exception as ex:
         print(ex)
+        logging.error(f"An error occurred: {ex} \n during received users")
         return {"error": "Такого пользователя не существует"}, 404
 
 
@@ -141,6 +161,7 @@ def add_result(user_id):
         return {"error": "Этот пользователь не может писать этот предмет"}, 400
     except Exception as ex:
         print(ex)
+        logging.error(f"An error occurred: {ex} \n during adding some results")
         return {"error": str(ex)}, 400
 
 
@@ -206,6 +227,7 @@ def remove_admin():
         return {"verdict": "ok"}, 200
     except Exception as ex:
         print(ex)
+        logging.error(f"An error occurred: {ex} \n during admins deleting")
         return {"error": "BadRequest"}, 400
 
 
