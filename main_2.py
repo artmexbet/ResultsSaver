@@ -1,12 +1,15 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect
 from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager, login_required, login_user, logout_user
 import logging
+from data import db_session
+from data.admins import *
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
+app.config["SECRET_KEY"] = "abrakadabra-key"
 cors = CORS(app)
 config = Config()
 logging.basicConfig(filename='main.log',
@@ -39,6 +42,14 @@ subjects = JsonDB(config.current_subjects)
 d = Day(config.current_students, subjects)
 d.set_day(new_day=config.day)
 admins = JsonDB(config.current_admins, {})
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(admin_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(Admin).get(admin_id)
 
 
 def users_per_day(day):
@@ -50,7 +61,7 @@ def users_per_day(day):
             except IndexError:
                 temp_data["users"][i]["results"] = {}
             del temp_data["users"][i]["days"]
-        logging.info("Info was received")
+        logging.info(f"Info about users in {day} day was received")
         return temp_data['users']
     except Exception as ex:
         print(ex)
@@ -84,16 +95,21 @@ def users():
     return {"verdict": "ok"}, 200
 
 
-@app.route("/users/<int:day>/<int:user_id>")
+@app.route("/users/<int:day>/<int:user_id>", methods=["post", "get"])
 @cross_origin()
 def get_user(day, user_id):
     try:
-        user = d.get_item_with_id(user_id).copy()
-        temp_result = [{"subject": key, "value": value[1]} for key, value in user["days"][day].items()]
-        user["results"] = temp_result
-        user.pop("days")
-        logging.info("Info about users was received")
-        return render_template("more.html", user=user)
+        if request.method == "GET":
+            user = d.get_item_with_id(user_id).copy()
+            temp_result = [{"subject": key, "value": value} for key, value in user["days"][day].items()]
+            user["results"] = temp_result
+            user.pop("days")
+            logging.info("Info about users was received")
+            return render_template("more.html", user=user)
+        data = request.form
+        temp = {key[:-6]: value for key, value in data.items()}
+        patch_results(user_id, temp)
+        return redirect("/")
     except Exception as ex:
         print(ex)
         logging.error(f"An error occurred: {ex} \n during received users")
@@ -107,11 +123,10 @@ def replace_results():
     return {"verdict": "ok"}, 200
 
 
-def patch_users(id):
+def patch_users(id, data: dict):
     item = d.get_item_with_id(id)
     not_valid = []
     if item:
-        data = request.get_json()
         for i in data.items():
             if i[0] in item.keys():
                 item[i[0]] = i[1]
@@ -126,13 +141,13 @@ def patch_users(id):
         return {"error": "No such id in database"}, 404
 
 
-def patch_results(user_id):
-    changes = request.get_json()
+def patch_results(user_id, changes: dict):
+    # changes = request.get_json()
     student = d.get_item_with_id(user_id)
     for change_key, change_value in changes.items():
         for day_ind in range(len(student["days"])):
             if change_key in student["days"][day_ind].keys():
-                student["days"][day_ind][change_key] = change_value
+                student["days"][day_ind][change_key] = [change_value, -1]
     d.commit()
 
 
@@ -315,18 +330,41 @@ def better_teams():
     return {"data": d.count_teams}
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    pass
+    if request.method == "GET":
+        return render_template("login_page.html")
+    form = request.form
+    mail = form["email"]
+    password = form["password"]
+    remember_me = True if form.get("remember_me", False) else False
+    db_sess = db_session.create_session()
+    user = db_sess.query(Admin).filter(Admin.email == mail).first()
+    logging.info(f"{user} was connected to site")
+    messages = []
+    if user:
+        if user.check_password(password):
+            login_user(user, remember=remember_me)
+            return redirect("/admin")
+        messages.append("Неверный")
+    else:
+        messages.append("Пользователя с таким email не существует!")
+    return render_template("login_page.html", message="<br>".join(messages))
 
 
 @app.route("/admin")
-# @login_required
+@login_required
 def admin():
     return render_template("admin.html")
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 if __name__ == '__main__':
+    db_session.global_init("db/iti.db")
     app.run(host="localhost")
-    # serve(app, host='0.0.0.0', port=8080)
-    # serve(app, host="0.0.0.0", port=5000)
