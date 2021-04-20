@@ -101,7 +101,7 @@ def get_user(day, user_id):
     try:
         if request.method == "GET":
             user = d.get_item_with_id(user_id).copy()
-            temp_result = [{"subject": key, "value": value[1]} for key, value in user["days"][day].items()]
+            temp_result = [{"subject": key, "value": value} for key, value in user["days"][day].items()]
             user["results"] = temp_result
             user.pop("days")
             logging.info("Info about users was received")
@@ -109,7 +109,7 @@ def get_user(day, user_id):
         data = request.form
         temp = {key[:-6]: value for key, value in data.items()}
         for key, value in data.items():
-            temp[key[:-6]] = value
+            temp[key[:-6]] = int(value)
         patch_results(user_id, temp)
         return redirect("/")
     except Exception as ex:
@@ -149,7 +149,7 @@ def patch_results(user_id, changes: dict):
     for change_key, change_value in changes.items():
         for day_ind in range(len(student["days"])):
             if change_key in student["days"][day_ind].keys():
-                student["days"][day_ind][change_key] = change_value
+                student["days"][day_ind][change_key] = [change_value, -1]
     d.commit()
 
 
