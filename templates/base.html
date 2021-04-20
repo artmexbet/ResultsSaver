@@ -18,7 +18,14 @@
         <a class="p-2 text-dark" href="/users/betters/0">Лучшие в первый день</a>
         <a class="p-2 text-dark" href="/users/betters/1">Лучшие во второй день</a>
     </nav>
-    <a class="btn btn-outline-primary" href="/login">Войти</a>
+    <nav class="my-2 my-md-0 mr-md-3">
+        {% if current_user.is_authenticated %}
+            <a class="btn btn-outline-success" href="/admin">Личный кабинет</a>
+            <a class="btn btn-outline-warning" href="/logout">Выйти</a>
+        {% else %}
+            <a class="btn btn-outline-primary" href="/login">Войти</a>
+        {% endif %}
+    </nav>
 </header>
 {% block body %}{% endblock %}
 </body>

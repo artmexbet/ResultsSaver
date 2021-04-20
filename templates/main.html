@@ -26,7 +26,14 @@
                         <td>{{ user["name"] }}</td>
                         <td>{{ user["class"] }}</td>
                         <td>{{ user["class_letter"] }}</td>
-                        <td><a href="/users/{{ day - 1 }}/{{ user["id"] }}">Подробнее</a></td>
+                        <td>
+                            {% if current_user.is_authenticated %}
+                                <a href="/users/{{ day - 1 }}/{{ user["id"] }}" class="btn btn-success">Подробнее</a>
+
+                            {% else %}
+                                <a href="/users/{{ day - 1 }}/{{ user["id"] }}" class="btn btn-success">Подробнее</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             {% endif %}

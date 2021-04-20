@@ -2,21 +2,37 @@
 {% block title %}Подробнее{% endblock %}
 {% block body %}
     <h2>{{ user["name"] }}</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Предмет</th>
-            <th scope="col">Результат</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for result in user["results"] %}
+    <form method="post">
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ result["subject"] }}</td>
-                <td>{{ result["value"] }}</td>
+                {% if not current_user.is_authenticated %}
+                <th scope="col">Предмет</th>
+                <th scope="col">Результат</th>
+                    {% else %}
+                    <th scope="col">Предмет</th>
+                <th scope="col">Результат</th>
+                <th scope="col">"Грязный" результат</th>
+                {% endif %}
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for result in user["results"] %}
+                <tr>
+                    {% if not current_user.is_authenticated %}
+                        <td>{{ result["subject"] }}</td>
+                        <td>{{ result["value"][1] }}</td>
+                    {% else %}
+                        <td><input name="{{ result["subject"] }}" disabled type="text" value="{{ result["subject"] }}"></td>
+                        <td><input name="{{ result["subject"] }}" disabled type="text" value="{{ result["value"][1] }}"></td>
+                        <td><input name="{{ result["subject"] }}_value" type="text" value="{{ result["value"][0] }}"></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if current_user.is_authenticated %}
+            <input class="btn btn-success" type="submit">
+        {% endif %}
+    </form>
 {% endblock %}

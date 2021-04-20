@@ -1,0 +1,230 @@
+2021-04-20 20:59:25,288 INFO root Info about users in 0 day was received
+2021-04-20 20:59:25,307 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:25] "[37mGET /0 HTTP/1.1[0m" 200 -
+2021-04-20 20:59:25,866 CRITICAL root Not Found
+2021-04-20 20:59:25,866 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:25] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 20:59:26,541 INFO root Info about users was received
+2021-04-20 20:59:26,546 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:26] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 20:59:26,839 CRITICAL root Not Found
+2021-04-20 20:59:26,840 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:26] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 20:59:29,934 CRITICAL root Not Found
+2021-04-20 20:59:29,935 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:29] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 20:59:36,346 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 20:59:38,769 INFO root Info about users was received
+2021-04-20 20:59:38,785 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:38] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 20:59:38,894 CRITICAL root Not Found
+2021-04-20 20:59:38,894 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 20:59:38] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:04:14,191 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:04:18,677 INFO root Info about users in 0 day was received
+2021-04-20 21:04:18,706 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:04:18] "[37mGET /0 HTTP/1.1[0m" 200 -
+2021-04-20 21:04:19,228 CRITICAL root Not Found
+2021-04-20 21:04:19,228 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:04:19] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:04:20,177 INFO root Info about users was received
+2021-04-20 21:04:20,184 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:04:20] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:04:20,483 CRITICAL root Not Found
+2021-04-20 21:04:20,484 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:04:20] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:04:27,551 CRITICAL root Not Found
+2021-04-20 21:04:27,552 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:04:27] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:05:10,216 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:05:19,667 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:05:22,438 INFO root Info about users was received
+2021-04-20 21:05:22,454 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:05:22] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:05:22,590 CRITICAL root Not Found
+2021-04-20 21:05:22,592 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:05:22] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:14:32,744 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:14:36,272 ERROR main_2 Exception on /users/0/7019 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask_cors\extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask_cors\decorator.py", line 128, in wrapped_function
+    resp = make_response(f(*args, **kwargs))
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\helpers.py", line 223, in make_response
+    return current_app.make_response(args)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2097, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The function either returned None or ended without a return statement.
+2021-04-20 21:14:36,307 CRITICAL root Internal Server Error
+2021-04-20 21:14:36,307 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:14:36] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:14:36,377 CRITICAL root Not Found
+2021-04-20 21:14:36,377 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:14:36] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:15:41,442 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:15:43,771 INFO root Info about users was received
+2021-04-20 21:15:43,788 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:43] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:15:43,891 CRITICAL root Not Found
+2021-04-20 21:15:43,892 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:43] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:15:50,454 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:50] "[32mPOST /users/0/7019 HTTP/1.1[0m" 302 -
+2021-04-20 21:15:50,781 INFO root Info about users in 0 day was received
+2021-04-20 21:15:50,801 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:50] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:15:51,593 CRITICAL root Not Found
+2021-04-20 21:15:51,594 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:51] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:15:53,700 INFO root Info about users was received
+2021-04-20 21:15:53,703 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:53] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:15:54,004 CRITICAL root Not Found
+2021-04-20 21:15:54,005 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:15:54] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:16:00,567 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:00] "[32mPOST /users/0/7019 HTTP/1.1[0m" 302 -
+2021-04-20 21:16:00,610 INFO root Info about users in 0 day was received
+2021-04-20 21:16:00,621 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:00] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:16:01,125 CRITICAL root Not Found
+2021-04-20 21:16:01,125 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:01] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:16:02,910 INFO root Info about users was received
+2021-04-20 21:16:02,912 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:02] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:16:03,031 CRITICAL root Not Found
+2021-04-20 21:16:03,032 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:03] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:16:23,609 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:16:35,635 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:16:35,705 INFO root Info about users was received
+2021-04-20 21:16:35,751 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:35] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:16:35,938 CRITICAL root Not Found
+2021-04-20 21:16:35,939 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:35] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:16:37,894 INFO root Info about users was received
+2021-04-20 21:16:37,898 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:37] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:16:38,206 CRITICAL root Not Found
+2021-04-20 21:16:38,207 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:16:38] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:17:11,029 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:18:19,935 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:20:25,590 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:26:19,743 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:26:24,292 CRITICAL root Not Found
+2021-04-20 21:26:24,293 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:24] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:26,319 CRITICAL root Not Found
+2021-04-20 21:26:26,319 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:26] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:28,435 INFO root Info about users in 0 day was received
+2021-04-20 21:26:28,464 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:28] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:26:28,972 CRITICAL root Not Found
+2021-04-20 21:26:28,973 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:28] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:29,915 INFO root Info about users was received
+2021-04-20 21:26:29,923 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:29] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:26:30,036 CRITICAL root Not Found
+2021-04-20 21:26:30,037 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:30] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:39,054 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:39] "[32mPOST /users/0/7019 HTTP/1.1[0m" 302 -
+2021-04-20 21:26:39,359 INFO root Info about users in 0 day was received
+2021-04-20 21:26:39,370 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:39] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:26:40,177 CRITICAL root Not Found
+2021-04-20 21:26:40,178 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:40] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:41,159 INFO root Info about users was received
+2021-04-20 21:26:41,163 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:41] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:26:41,460 CRITICAL root Not Found
+2021-04-20 21:26:41,460 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:41] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:49,983 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:49] "[32mPOST /users/0/7019 HTTP/1.1[0m" 302 -
+2021-04-20 21:26:50,000 INFO root Info about users in 0 day was received
+2021-04-20 21:26:50,012 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:50] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:26:50,499 CRITICAL root Not Found
+2021-04-20 21:26:50,500 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:50] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:26:51,426 INFO root Info about users was received
+2021-04-20 21:26:51,428 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:51] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:26:51,535 CRITICAL root Not Found
+2021-04-20 21:26:51,536 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:26:51] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:28:16,906 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:29:25,734 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:25] "[32mPOST /users/0/7019 HTTP/1.1[0m" 302 -
+2021-04-20 21:29:25,767 INFO root Info about users in 0 day was received
+2021-04-20 21:29:25,890 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:25] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:29:26,605 CRITICAL root Not Found
+2021-04-20 21:29:26,606 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:26] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:29:37,730 INFO root Info about users in 0 day was received
+2021-04-20 21:29:37,810 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:37] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:29:38,333 CRITICAL root Not Found
+2021-04-20 21:29:38,334 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:38] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:29:39,213 INFO root Info about users was received
+2021-04-20 21:29:39,235 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:39] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:29:39,346 CRITICAL root Not Found
+2021-04-20 21:29:39,347 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:39] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:29:56,861 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:56] "[32mGET /logout HTTP/1.1[0m" 302 -
+2021-04-20 21:29:57,166 INFO root Info about users in 0 day was received
+2021-04-20 21:29:57,243 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:57] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:29:58,074 CRITICAL root Not Found
+2021-04-20 21:29:58,075 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:58] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:29:58,787 INFO root Info about users was received
+2021-04-20 21:29:58,789 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:58] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:29:59,097 CRITICAL root Not Found
+2021-04-20 21:29:59,098 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:29:59] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:30:36,550 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:30:39,943 CRITICAL root Not Found
+2021-04-20 21:30:39,946 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:30:39] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:19,026 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:36:21,874 INFO root Info about users was received
+2021-04-20 21:36:21,888 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:21] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:22,043 CRITICAL root Not Found
+2021-04-20 21:36:22,044 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:22] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:24,131 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:24] "[37mGET /login HTTP/1.1[0m" 200 -
+2021-04-20 21:36:24,425 CRITICAL root Not Found
+2021-04-20 21:36:24,426 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:24] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:26,444 INFO root Admin №1 Артём with subject Математика and email maydurov2004@yandex.ru was connected to site
+2021-04-20 21:36:26,534 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:26] "[32mPOST /login HTTP/1.1[0m" 302 -
+2021-04-20 21:36:26,543 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:26] "[37mGET /admin HTTP/1.1[0m" 200 -
+2021-04-20 21:36:26,688 CRITICAL root Not Found
+2021-04-20 21:36:26,689 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:26] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:28,472 INFO root Info about users in 0 day was received
+2021-04-20 21:36:28,491 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:28] "[37mGET /0 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:29,003 CRITICAL root Not Found
+2021-04-20 21:36:29,004 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:29] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:29,455 INFO root Info about users was received
+2021-04-20 21:36:29,457 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:29] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:29,758 CRITICAL root Not Found
+2021-04-20 21:36:29,758 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:29] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:33,510 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:33] "[32mPOST /users/0/7019 HTTP/1.1[0m" 302 -
+2021-04-20 21:36:33,548 INFO root Info about users in 0 day was received
+2021-04-20 21:36:33,560 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:33] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:36:34,047 CRITICAL root Not Found
+2021-04-20 21:36:34,047 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:34] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:35,868 INFO root Info about users was received
+2021-04-20 21:36:35,870 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:35] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:35,978 CRITICAL root Not Found
+2021-04-20 21:36:35,978 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:35] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:40,771 INFO root Info about users in 1 day was received
+2021-04-20 21:36:40,783 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:40] "[37mGET /1 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:41,292 CRITICAL root Not Found
+2021-04-20 21:36:41,292 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:41] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:41,984 INFO root Info about users in 0 day was received
+2021-04-20 21:36:41,997 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:41] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:36:42,511 CRITICAL root Not Found
+2021-04-20 21:36:42,512 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:42] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:43,715 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:43] "[37mGET /users/betters/0 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:44,019 CRITICAL root Not Found
+2021-04-20 21:36:44,019 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:44] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:45,045 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:45] "[37mGET /users/betters/1 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:45,136 CRITICAL root Not Found
+2021-04-20 21:36:45,136 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:45] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:47,979 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:47] "[37mGET /users/betters/0 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:48,285 CRITICAL root Not Found
+2021-04-20 21:36:48,286 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:48] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:49,746 INFO root Info about users in 0 day was received
+2021-04-20 21:36:49,758 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:49] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-20 21:36:50,259 CRITICAL root Not Found
+2021-04-20 21:36:50,259 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:50] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:36:50,559 INFO root Info about users in 0 day was received
+2021-04-20 21:36:50,571 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:50] "[37mGET /0 HTTP/1.1[0m" 200 -
+2021-04-20 21:36:51,081 CRITICAL root Not Found
+2021-04-20 21:36:51,082 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:36:51] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:39:19,093 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:40:29,500 INFO werkzeug  * Running on http://localhost:5000/ (Press CTRL+C to quit)
+2021-04-20 21:40:34,006 INFO root Info about users in 0 day was received
+2021-04-20 21:40:34,034 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:34] "[37mGET /0 HTTP/1.1[0m" 200 -
+2021-04-20 21:40:34,545 CRITICAL root Not Found
+2021-04-20 21:40:34,545 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:34] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:40:35,988 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:35] "[37mGET /admin HTTP/1.1[0m" 200 -
+2021-04-20 21:40:36,284 CRITICAL root Not Found
+2021-04-20 21:40:36,285 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:36] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:40:38,933 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:38] "[37mGET /admin HTTP/1.1[0m" 200 -
+2021-04-20 21:40:39,020 CRITICAL root Not Found
+2021-04-20 21:40:39,021 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:39] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:40:40,651 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:40] "[37mGET /admin HTTP/1.1[0m" 200 -
+2021-04-20 21:40:40,953 CRITICAL root Not Found
+2021-04-20 21:40:40,955 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:40] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:40:41,561 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:41] "[37mGET /admin HTTP/1.1[0m" 200 -
+2021-04-20 21:40:41,643 CRITICAL root Not Found
+2021-04-20 21:40:41,644 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:40:41] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-20 21:41:10,549 INFO root Info about users in 0 day was received
+2021-04-20 21:41:10,560 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:41:10] "[37mGET /0 HTTP/1.1[0m" 200 -
+2021-04-20 21:41:11,072 CRITICAL root Not Found
+2021-04-20 21:41:11,072 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:41:11] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
