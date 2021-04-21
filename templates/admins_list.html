@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Админы{% endblock %}
+{% block body %}
+    <label>
+        <a class="btn btn-outline-success" href="/register">Добавить админа</a>
+    </label>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Email</th>
+            <th scope="col">Предмет</th>
+            <th scope="col">Редактирование</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for admin in admins %}
+            <tr>
+                <th scope="row">{{ admin.id }}</th>
+                <td>{{ admin.email }}</td>
+                <td>{{ admin.name }}</td>
+                <td>{{ admin.subject }}</td>
+                <td>
+                    <a class="btn btn-warning" href="/admins/{{ admin.id }}">Редактировать</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

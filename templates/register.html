@@ -1,55 +1,35 @@
 {% extends "base.html" %}
-
+{% block title %}Регистрация{% endblock %}
 {% block body %}
-<h1>Регистрация</h1>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.email.label }}<br>
-        {{ form.email(class="form-control", type="email") }}<br>
-        {% for error in form.email.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", type="password") }}<br>
-        {% for error in form.password.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password_again.label }}<br>
-        {{ form.password_again(class="form-control", type="password") }}<br>
-        {% for error in form.password_again.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.name.label }}<br>
-        {{ form.name(class="form-control") }}<br>
-        {% for error in form.name.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.about.label }}<br>
-        {{ form.about(class="form-control") }}<br>
-        {% for error in form.about.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-    {{message}}
-</form>
+    <main class="text-center container">
+        <form class="form-signup" method="post">
+            <img class="mb-4" src="{{ url_for("static", filename="images/univers.png") }}" alt="" width="72"
+                 height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Пожалуйста введите данные корректно</h1>
+            <label for="inputEmail" class="sr-only">Email адрес</label>
+            <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email адрес" required=""
+                   autofocus="">
+            <br>
+            <label for="inputPassword" class="sr-only">Пароль</label>
+            <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль"
+                   required="">
+            <br>
+            <label for="inputName" class="sr-only">Имя</label>
+            <input name="name" type="text" id="inputName" class="form-control" placeholder="ФИО" required="">
+            <br>
+            <label for="selectSubject" class="sr-only">Предмет</label>
+            <select name="subject" id="selectSubject" class="form-control dropdown-toggle">
+                {% for subject in subjects %}
+                    <option>{{ subject }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label>
+                <input class="btn btn-lg btn-primary btn-block" type="submit">
+            </label>
+            {% if message %}
+                <p class="h4 text-red">{{ message }}</p>
+            {% endif %}
+        </form>
+    </main>
 {% endblock %}

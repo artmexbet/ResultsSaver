@@ -76,28 +76,40 @@ def main():
 
 
 @app.route('/register', methods=['GET', 'POST'])
+@login_required
 def reqister():
-    form = RegisterForm()
-    if form.validate_on_submit():
-        if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Пароли не совпадают")
+    if request.method == "POST":
+        form = request.form
         db_sess = db_session.create_session()
-        if db_sess.query(Admin).filter(Admin.email == form.email.data).first():
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Такой пользователь уже есть")
+        if db_sess.query(Admin).filter(Admin.email == form["email"]).first():
+            return render_template('register.html',
+                                   message="Такой пользователь уже есть",
+                                   subjects=list(subjects.keys()) + ["Главный админ"])
         user = Admin(
-            name=form.name.data,
-            email=form.email.data,
-            subject=form.about.data
+            name=form["name"],
+            email=form["email"],
+            subject=form["subject"]
         )
-        user.set_password(form.password.data)
+        user.set_password(form["password"])
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
-    return render_template('register.html', title='Регистрация', form=form)
+        return redirect('/admins')
+    return render_template('register.html', subjects=list(subjects.keys()) + ["Главный админ"])
+
+
+@app.route("/admins/<int:admin_id>", methods=["GET", "POST"])
+@login_required
+def update_admins(admin_id):
+    sess = db_session.create_session()
+    cur_admin = sess.query(Admin).filter(Admin.id == admin_id).first()
+    if request.method == "GET":
+        return render_template("update_admins.html", admin=cur_admin,
+                               subjects=list(subjects.keys()) + ["Главный админ"])
+    form = request.form
+    cur_admin.name = form.get("name", cur_admin.name)
+    cur_admin.subject = form.get("subject", cur_admin.subject)
+    sess.commit()
+    return redirect("/admins")
 
 
 @app.route("/<int:day>")
@@ -251,22 +263,14 @@ def route_new_db():
     new_db(request.get_json())
 
 
-def add_admin():
-    data = request.get_json()
-    admins["data"].append(data)
-    admins.commit()
-    return {"verdict": "ok"}, 200
-
-
-def remove_admin():
-    data = request.get_json()
+@app.route("/admins/<int:admin_id>/delete")
+@login_required
+def remove_admin(admin_id):
     try:
-        for i, elem in enumerate(admins["data"]):
-            if elem["login"] == data["login"]:
-                admins["data"].remove(elem)
-                break
-        admins.commit()
-        return {"verdict": "ok"}, 200
+        sess = db_session.create_session()
+        sess.delete(sess.query(Admin).filter(Admin.id == admin_id).first())
+        sess.commit()
+        return redirect("/admins")
     except Exception as ex:
         print(ex)
         logging.error(f"An error occurred: {ex} \n during admins deleting")
@@ -346,9 +350,10 @@ def betters():
 
 
 @app.route("/admins")
-@cross_origin()
+@login_required
 def get_admins():
-    return jsonify(admins), 200
+    sess = db_session.create_session()
+    return render_template("admins_list.html", admins=sess.query(Admin).all()), 200
 
 
 @app.route("/users/betters/teams")

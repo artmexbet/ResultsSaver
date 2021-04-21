@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Редактирование админов{% endblock %}
+{% block body %}
+    <form class="text-center" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Email</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Предмет</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">{{ admin.id }}</th>
+                <td>{{ admin.email }}</td>
+                <td>
+                    <input name="name" value="{{ admin.name }}" class="form-control">
+                </td>
+                <td>
+                    <select name="subject" id="selectSubject" class="form-control dropdown-toggle">
+                        {% for subject in subjects %}
+                            {% if subject == admin.subject %}
+                                <option selected>{{ subject }}</option>
+                            {% else %}
+                                <option>{{ subject }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <label>
+            <input type="submit" class="form-control btn btn-success">
+        </label>
+    </form>
+    <a class="btn btn-danger" href="/admins/{{ admin.id }}/delete">Удалить админа</a>
+{% endblock %}

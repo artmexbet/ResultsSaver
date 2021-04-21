@@ -3,10 +3,6 @@ import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from flask_login import UserMixin
-from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, TextAreaField, SubmitField
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired
 
 
 class Admin(SqlAlchemyBase, UserMixin):
@@ -30,12 +26,3 @@ class Admin(SqlAlchemyBase, UserMixin):
 
     def __str__(self):
         return f"Admin №{self.id} {self.name} with subject {self.subject} and email {self.email}"
-
-
-class RegisterForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
-    name = StringField('Имя пользователя', validators=[DataRequired()])
-    subject = StringField('Предмет', validators=[DataRequired()])
-    submit = SubmitField('Зарегистрироваться')
