@@ -327,6 +327,7 @@ def convert_to_betters(users: list) -> list:
     return day
 
 
+
 if __name__ == '__main__':
     subjects = JsonDB("subjects.json")
     d = Day("test1.json", subjects)

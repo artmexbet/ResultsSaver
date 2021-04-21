@@ -306,3 +306,140 @@ TypeError: The view function did not return a valid response. The function eithe
 2021-04-20 21:59:32,425 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:59:32] "[37mGET /users/0/7019 HTTP/1.1[0m" 200 -
 2021-04-20 21:59:32,725 CRITICAL root Not Found
 2021-04-20 21:59:32,725 INFO werkzeug 127.0.0.1 - - [20/Apr/2021 21:59:32] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-21 13:10:51,132 INFO werkzeug  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-04-21 13:11:23,376 INFO root Info about users in 0 day was received
+2021-04-21 13:11:23,400 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:11:23] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-21 13:11:24,462 CRITICAL root Not Found
+2021-04-21 13:11:24,463 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:11:24] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-21 13:11:34,773 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:11:34] "[37mGET /register HTTP/1.1[0m" 200 -
+2021-04-21 13:11:34,862 CRITICAL root Not Found
+2021-04-21 13:11:34,862 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:11:34] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-21 13:13:15,609 INFO werkzeug  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-04-21 13:13:17,465 ERROR main_2 Exception on /register [GET]
+Traceback (most recent call last):
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_cors\extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\1\Desktop\flaskWEBProj\main_2.py", line 100, in reqister
+    return render_template('register.html', title='Регистрация', form=form)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\templating.py", line 137, in render_template
+    return _render(
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\register.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\base.html", line 30, in top-level template code
+    {% block body %}{% endblock %}
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\register.html", line 44, in block "body"
+    {{ form.about.label }}<br>
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'data.admins.RegisterForm object' has no attribute 'about'
+2021-04-21 13:13:17,916 CRITICAL root Internal Server Error
+2021-04-21 13:13:17,917 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:13:17] "[37mGET /register HTTP/1.1[0m" 200 -
+2021-04-21 13:13:18,115 CRITICAL root Not Found
+2021-04-21 13:13:18,115 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:13:18] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-21 13:13:22,773 ERROR main_2 Exception on /register [GET]
+Traceback (most recent call last):
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_cors\extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\1\Desktop\flaskWEBProj\main_2.py", line 100, in reqister
+    return render_template('register.html', title='Регистрация', form=form)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\templating.py", line 137, in render_template
+    return _render(
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\register.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\base.html", line 30, in top-level template code
+    {% block body %}{% endblock %}
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\register.html", line 44, in block "body"
+    {{ form.about.label }}<br>
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'data.admins.RegisterForm object' has no attribute 'about'
+2021-04-21 13:13:22,773 CRITICAL root Internal Server Error
+2021-04-21 13:13:22,774 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:13:22] "[37mGET /register HTTP/1.1[0m" 200 -
+2021-04-21 13:13:22,843 CRITICAL root Not Found
+2021-04-21 13:13:22,843 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:13:22] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-21 13:14:06,096 INFO werkzeug  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-04-21 13:14:11,230 INFO root Info about users in 0 day was received
+2021-04-21 13:14:11,246 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:14:11] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-21 13:14:11,548 CRITICAL root Not Found
+2021-04-21 13:14:11,548 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:14:11] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+2021-04-21 13:14:16,804 ERROR main_2 Exception on /register [GET]
+Traceback (most recent call last):
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_cors\extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\1\Desktop\flaskWEBProj\main_2.py", line 100, in reqister
+    return render_template('register.html', title='Регистрация', form=form)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\templating.py", line 137, in render_template
+    return _render(
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\register.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\base.html", line 30, in top-level template code
+    {% block body %}{% endblock %}
+  File "C:\Users\1\Desktop\flaskWEBProj\templates\register.html", line 44, in block "body"
+    {{ form.about.label }}<br>
+  File "C:\Users\1\AppData\Local\Programs\Python\Python39\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'data.admins.RegisterForm object' has no attribute 'about'
+2021-04-21 13:14:16,806 CRITICAL root Internal Server Error
+2021-04-21 13:14:16,807 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:14:16] "[37mGET /register HTTP/1.1[0m" 200 -
+2021-04-21 13:14:16,958 CRITICAL root Not Found
+2021-04-21 13:14:16,958 INFO werkzeug 127.0.0.1 - - [21/Apr/2021 13:14:16] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -

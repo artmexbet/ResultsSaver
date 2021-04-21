@@ -75,6 +75,31 @@ def main():
     return render_template("main.html", day=1, users=users_per_day(0))
 
 
+@app.route('/register', methods=['GET', 'POST'])
+def reqister():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        db_sess = db_session.create_session()
+        if db_sess.query(Admin).filter(Admin.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        user = Admin(
+            name=form.name.data,
+            email=form.email.data,
+            subject=form.about.data
+        )
+        user.set_password(form.password.data)
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/login')
+    return render_template('register.html', title='Регистрация', form=form)
+
+
 @app.route("/<int:day>")
 def main_2(day):
     return render_template("main.html", day=day + 1, users=users_per_day(day))
