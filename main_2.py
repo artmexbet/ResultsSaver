@@ -78,10 +78,11 @@ def main():
     data = users_per_day(0)
     if args:
         for key, value in args.items():
-            if key == "subject":
-                data = list(filter(lambda x: value in x["results"], data))
-            elif key == "class":
-                data = list(filter(lambda x: x["class"] == int(value), data))
+            if value:
+                if key == "subject":
+                    data = list(filter(lambda x: value in x["results"], data))
+                elif key == "class":
+                    data = list(filter(lambda x: x["class"] == int(value), data))
     return render_template("main.html", day=1, users=data, config=config, subjects=list(subjects))
 
 
