@@ -100,9 +100,9 @@ class Day(JsonDB):
                 self.commit()
                 return {"verdict": "ok"}, 200  # Всё прошло успешно
             else:
-                return {"verdict": "This subject doesn't exist today"}, 400  # Этого предмета в этот день нет
+                return {"verdict": "This subject doesn't exist today"}, 401  # Этого предмета в этот день нет
         else:
-            return {"verdict": "This subject doesn't exist"}, 400  # Такого предмета не существует
+            return {"verdict": "This subject doesn't exist"}, 404  # Такого предмета не существует
 
     def set_day(self, new_day=None):
         if new_day is not None:
@@ -287,10 +287,9 @@ def student_sum(student: dict) -> int:
 
 def recount(day: Day, all_subjects: JsonDB) -> dict:
     classes = day.classes_count
+    a = day.results
     for subject in all_subjects.keys():
         for class_digit in range(*classes):
-            a = day.results
-            print(a)
             subject_result = all_subject_results(a, subject, class_digit)
             if subject_result:
                 user_id, max_result = max(subject_result.items(), key=lambda x: x[1])
@@ -302,11 +301,6 @@ def recount(day: Day, all_subjects: JsonDB) -> dict:
                     day.get_item_with_id(i)["days"][day.day][subject][1] = round(val / percent, 1)
     day.commit()
     return {"verdict": "ok"}
-
-
-def sorting(day: Day):
-    day["users"].sort(key=lambda x: x["id"])
-    day.commit()
 
 
 def get_subject_result(student: dict, subject: str) -> float:
@@ -325,7 +319,6 @@ def convert_to_betters(users: list) -> list:
         day[user_ind].pop("days")
         day[user_ind]["results"] = {key: value for key, value in results}
     return day
-
 
 
 if __name__ == '__main__':

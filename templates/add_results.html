@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Добавление результатов{% endblock %}
+{% block body %}
+    <main class="container text-center">
+        <h1>Добавление результата</h1>
+        <form class="form-results" method="post">
+            <label for="inputId" class="sr-only">ID ученика</label>
+            <input type="number" id="inputId" class="form-control" name="id" min="0" placeholder="Номер ученика" required><br>
+            <label for="selectSubject" class="sr-only">Предмет</label>
+            {% if current_user.subject == "Главный админ" %}
+                <select name="subject" id="selectSubject" class="form-control dropdown-toggle" required>
+                    {% for subject in subjects %}
+                        <option>{{ subject }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input name="subject" id="selectSubject" class="form-control" value="{{ current_user.subject }}">
+            {% endif %}<br>
+            <label for="inputScore" class="sr-only">Результат</label>
+            <input type="number" id="inputScore" class="form-control" name="score" min="0" max="30"
+                   placeholder="Результат" required><br>
+            <label>
+                <input type="submit" class="btn btn-success form-control">
+            </label>
+        </form>
+        {% if message %}
+            <h3>{{ message }}</h3>
+        {% endif %}
+    </main>
+{% endblock %}

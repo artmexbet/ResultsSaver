@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Админы{% endblock %}
 {% block body %}
-    <label>
-        <a class="btn btn-outline-success" href="/register">Добавить админа</a>
-    </label>
+    {% if current_user.subject == "Главный админ" %}
+        <label>
+            <a class="btn btn-outline-success" href="/register">Добавить админа</a>
+        </label>
+    {% endif %}
     <table class="table">
         <thead>
         <tr>

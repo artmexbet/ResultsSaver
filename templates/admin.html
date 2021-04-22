@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Админ{% endblock %}
 {% block body %}
+    <main class="container text-center">
     <nav class="my-2 my-md-0 mr-md-3">
         <a class="btn btn-outline-info" href="/admins">Админы</a>
-        <a class="btn btn-outline-info" href="">Админы</a>
-        <a class="btn btn-outline-info" href="">Админы</a>
-    </nav>
+        <a class="btn btn-outline-success" href="/users/results">Добавить результат</a>
+        {% if current_user.subject == "Главный админ" %}
+            <a class="btn btn-outline-warning" href="/users/count">Пересчитать результат</a>
+            <a class="btn btn-outline-warning" href="/users/change-day">Открытые дни</a>
+            <form method="post" class="alert alert-warning" enctype="multipart/form-data">
+                <label for="inputFile">Сюда можно загрузить таблицу участников</label>
+                <input id="inputFile" type="file" name="file" class="form-control" accept=".xlsx" required><br>
+                <input type="submit" class="btn btn-outline-success">
+            </form>
+        {% endif %}
+    </nav></main>
 {% endblock %}

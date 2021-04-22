@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, abort, url_for
 from Utilities import *
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
+from werkzeug.utils import secure_filename
 import logging
 from data import db_session
 from data.admins import *
@@ -10,6 +11,7 @@ from data.admins import *
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 app.config["SECRET_KEY"] = "abrakadabra-key"
+app.config["UPLOAD_FOLDER"] = "temp_files"
 cors = CORS(app)
 config = Config()
 logging.basicConfig(filename='main.log',
@@ -200,27 +202,24 @@ def all_sum():
     return result, 200
 
 
-def add_result(user_id):
+def add_result(user_id, data):
     """
     Здесь добавляем результаты людям
     :param user_id: id пользователя, которому будут добавлены баллы
+    :param data: информация о результате пользователя
     :return: Прога вернёт вердикт, в нормальном положении это что-то вроде "ok"
     """
-    # Пример запроса в файле add_result.json
-    data = request.get_json()
     try:
         student = d.get_item_with_id(user_id)
         if student["class"] in subjects[data["subject"]][2]:
             return d.add_result(user_id, data["subject"], data["score"], student)
-        return {"error": "Этот пользователь не может писать этот предмет"}, 400
+        return {"error": "Этот пользователь не может писать этот предмет"}, 401
     except Exception as ex:
         print(ex)
         logging.error(f"An error occurred: {ex} \n during adding some results")
         return {"error": str(ex)}, 400
 
 
-@app.route("/test_for_correct", methods=["POST"])
-@cross_origin()
 def search():
     data = request.get_json()
     """Пример json в файле example.json"""
@@ -234,29 +233,17 @@ def search():
         return {"verdict": "ok"}, 200  # Всё прошло успешно
 
 
+@app.route("/users/count")
+@login_required
 def recount_main():
-    # Пример запроса смотрите в файле recount_example.json
     recount(d, subjects)
-    return {"verdict": "ok"}, 200
+    return redirect("/")
 
 
 def add_user():
     data = request.get_json()
     d.add_user(data)
     return {"verdict": "ok"}, 200
-
-
-# @app.route("/check_admins", methods=["POST"])
-# @cross_origin()
-# def check_admins():
-#     data = request.get_json()
-#     try:
-#         if any(map(lambda x: x["login"] == data["login"] and x["password"] == data["password"], admins["data"])):
-#             return {"data": {"access": 1, "speciality": admins.get_from_key("login", data["login"])["subject"]}}, 200
-#         return {"data": {"access": 0}}, 200
-#     except Exception as ex:
-#         print(ex)
-#         return {"error": "BadRequest"}, 400
 
 
 def route_new_db():
@@ -384,10 +371,22 @@ def login():
     return render_template("login_page.html", message="<br>".join(messages))
 
 
-@app.route("/admin")
+@app.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin():
-    return render_template("admin.html")
+    if request.method == "GET":
+        return render_template("admin.html")
+    form = request.files
+    if "file" not in form.keys():
+        return "Нет файла!"
+    file = form["file"]
+    if file.name == "":
+        return redirect("/admin")
+    filename = secure_filename(file.filename)
+    path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(path)
+    json_from_xlsx(openpyxl.load_workbook(path), d)
+    return redirect("/admin")
 
 
 @app.route('/logout')
@@ -395,6 +394,24 @@ def admin():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route("/users/results", methods=["GET", "POST"])
+@login_required
+def res():
+    if request.method == "GET":
+        return render_template("add_results.html", subjects=list(subjects.keys()))
+    form = request.form
+    answer = add_result(int(form["id"]),
+                        {"subject": form.get("subject", current_user.subject), "score": int(form["score"])})
+    if answer[1] == 401:
+        return render_template("add_results.html", subjects=list(subjects.keys()),
+                               message="Ученик не может писать этот предмет!"
+                                       " Возможно, в этот день его ещё не проводили.")
+    if answer[1] != 200:
+        abort(answer[1])
+    else:
+        return redirect("/users/results")
 
 
 if __name__ == '__main__':

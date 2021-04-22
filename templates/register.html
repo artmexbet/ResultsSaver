@@ -7,18 +7,18 @@
                  height="72">
             <h1 class="h3 mb-3 font-weight-normal">Пожалуйста введите данные корректно</h1>
             <label for="inputEmail" class="sr-only">Email адрес</label>
-            <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email адрес" required=""
+            <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email адрес" required
                    autofocus="">
             <br>
             <label for="inputPassword" class="sr-only">Пароль</label>
             <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль"
-                   required="">
+                   required>
             <br>
             <label for="inputName" class="sr-only">Имя</label>
-            <input name="name" type="text" id="inputName" class="form-control" placeholder="ФИО" required="">
+            <input name="name" type="text" id="inputName" class="form-control" placeholder="ФИО" required>
             <br>
             <label for="selectSubject" class="sr-only">Предмет</label>
-            <select name="subject" id="selectSubject" class="form-control dropdown-toggle">
+            <select name="subject" id="selectSubject" class="form-control dropdown-toggle" required>
                 {% for subject in subjects %}
                     <option>{{ subject }}</option>
                 {% endfor %}
