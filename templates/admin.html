@@ -2,17 +2,64 @@
 {% block title %}Админ{% endblock %}
 {% block body %}
     <main class="container text-center">
-    <nav class="my-2 my-md-0 mr-md-3">
-        <a class="btn btn-outline-info" href="/admins">Админы</a>
-        <a class="btn btn-outline-success" href="/users/results">Добавить результат</a>
-        {% if current_user.subject == "Главный админ" %}
-            <a class="btn btn-outline-warning" href="/users/count">Пересчитать результат</a>
-            <a class="btn btn-outline-warning" href="/users/change-day">Открытые дни</a>
-            <form method="post" class="alert alert-warning" enctype="multipart/form-data">
-                <label for="inputFile">Сюда можно загрузить таблицу участников</label>
-                <input id="inputFile" type="file" name="file" class="form-control" accept=".xlsx" required><br>
-                <input type="submit" class="btn btn-outline-success">
-            </form>
-        {% endif %}
-    </nav></main>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="btn btn-outline-info" href="/admins">Админы</a>
+            <a class="btn btn-outline-success" href="/users/results">Добавить результат</a>
+            {% if current_user.subject == "Главный админ" %}
+                <a class="btn btn-outline-warning" href="/users/count">Пересчитать результат</a>
+                <br>
+                <form method="post" class="alert alert-warning" enctype="multipart/form-data">
+                    <label for="inputFile">Сюда можно загрузить таблицу участников</label>
+                    <input id="inputFile" type="file" name="file" class="form-control" accept=".xlsx" required><br>
+                    <input type="submit" class="btn btn-outline-success">
+                </form>
+                <div class="alert alert-warning">
+                    {% if config.opened_day == 0 %}
+                        <p>Сейчас все результаты и номера учеников закрыты</p>
+                        <a class="btn btn-warning" href="/users/change-day/1">Открыть результаты первого дня</a>
+                    {% elif config.opened_day == 1 %}
+                        <p>Сейчас открыт только первый день</p>
+                        <a class="btn btn-warning" href="/users/change-day/2">Открыть результаты второго дня</a>
+                        <a class="btn btn-warning" href="/users/change-day/0">Закрыть результаты первого дня</a>
+                    {% elif config.opened_day == 2 %}
+                        <p>Сейчас открыты все результаты</p>
+                        <a class="btn btn-warning" href="/users/change-day/1">Закрыть результаты второго дня</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </nav>
+        <div>
+            <nav class="my-2 my-md-0 mr-md-3">
+                <h3>Список предметов</h3>
+                {% if current_user.subject == "Главный админ" %}
+                    <a class="btn btn-outline-success" href="/subjects/add">Добавить</a>
+                {% endif %}
+            </nav>
+            <br>
+            <table class="table" id="subjectTable">
+                <thead>
+                <tr>
+                    <th scope="col">День проведения</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Классы</th>
+                    {% if current_user.subject == "Главный админ" %}
+                        <th scope="col">Удаление</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for subject in subjects.keys() %}
+                    <tr>
+                        <th scope="row">{{ subjects[subject][0] }}</th>
+                        <td>{{ subject }}</td>
+                        <td>{{ subjects[subject][2] }}</td>
+                        {% if current_user.subject == "Главный админ" %}
+                            <td><a class="btn btn-danger" href="subjects/delete/{{ subject }}">Удалить</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
 {% endblock %}

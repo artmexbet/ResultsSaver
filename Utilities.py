@@ -1,9 +1,9 @@
-import openpyxl
 import json
 import os
-
-from openpyxl import Workbook
 from copy import deepcopy
+
+import openpyxl
+from openpyxl import Workbook
 
 
 class SubjectIsAlreadyExists(Exception):
@@ -218,9 +218,16 @@ class Config:
             print(ex)
 
     @property
+    def opened_day(self):
+        try:
+            return self.config["opened_day"]
+        except Exception as ex:
+            print(ex)
+
+    @property
     def configs(self) -> tuple:
         try:
-            return self.day, self.current_subjects, self.current_students, self.current_admins
+            return self.day, self.current_subjects, self.current_students, self.current_admins, self.opened_day
         except Exception as ex:
             print(ex)
 
@@ -324,4 +331,5 @@ def convert_to_betters(users: list) -> list:
 if __name__ == '__main__':
     subjects = JsonDB("subjects.json")
     d = Day("test1.json", subjects)
-    print(d.get_item_with_id(899))
+    d.set_day(1)
+    print(d.day)

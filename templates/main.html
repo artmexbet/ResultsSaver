@@ -3,11 +3,15 @@
 {% block body %}
     <main class="text-center">
         <h1>{% if day %}
-            {% if day == 1 %}Первый день{% elif day == 2 %}Второй день{% elif day == 3 %}Лучшие в первый день
-            {% elif day == 4 %}Лучшие во второй день{% endif %}
+            {% if day == 1 %}Первый день{% elif day == 2 %}Второй день{% endif %}
         {% else %} Странно, дня нет
         {% endif %}
         </h1>
+{#        <form method="post">#}
+{#            <nav class="my-2 my-md-0 mr-md-3">#}
+{#                #}
+{#            </nav>#}
+{#        </form>#}
         <table class="table">
             <thead>
             <tr>
@@ -22,14 +26,18 @@
             {% if users %}
                 {% for user in users %}
                     <tr>
-                        <th scope="row">{{ user["id"] }}</th>
+                        {% if config.opened_day == 2 %}
+                            <th scope="row">{{ user["id"] }}</th>
+                        {% else %}
+                            <th scope="row">0000</th>
+                        {% endif %}
                         <td>{{ user["name"] }}</td>
                         <td>{{ user["class"] }}</td>
                         <td>{{ user["class_letter"] }}</td>
                         <td>
-                            {% if current_user.is_authenticated %}
-                                <a href="/users/{{ day - 1 }}/{{ user["id"] }}" class="btn btn-success">Подробнее</a>
-
+                            {% if current_user.is_authenticated and current_user.subject == "Главный админ" %}
+                                <a href="/users/{{ day - 1 }}/{{ user["id"] }}"
+                                   class="btn btn-success">Редактировать</a>
                             {% else %}
                                 <a href="/users/{{ day - 1 }}/{{ user["id"] }}" class="btn btn-success">Подробнее</a>
                             {% endif %}

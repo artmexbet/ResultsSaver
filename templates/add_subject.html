@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+{% block body %}
+    <main class="text-center container">
+        <form class="form-signup" method="post">
+            <img class="mb-4" src="{{ url_for("static", filename="images/univers.png") }}" alt="" width="72"
+                 height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Пожалуйста введите данные корректно</h1>
+            <label for="inputSubject" class="sr-only">Название</label>
+            <input name="subject" type="text" id="inputSubject" class="form-control" placeholder="Название предмета"
+                   required>
+            <br>
+            <label for="inputDays" class="sr-only">День проведения</label>
+            <input name="days" type="number" id="inputDays" class="form-control" placeholder="День проведения" required
+                   autofocus="" min="1" max="2">
+            <br>
+            <label for="inputClasses" class="sr-only">Классы (укажите несколько через запятую)</label>
+            <input name="classes" type="text" id="inputClasses" class="form-control" placeholder="Классы" required
+                   autofocus="">
+            <br>
+            <label>
+                <input class="btn btn-lg btn-primary btn-block" type="submit">
+            </label>
+            {% if message %}
+                <p class="h4 text-red">{{ message }}</p>
+            {% endif %}
+        </form>
+    </main>
+{% endblock %}

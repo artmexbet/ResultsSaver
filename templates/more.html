@@ -1,38 +1,51 @@
 {% extends "base.html" %}
 {% block title %}Подробнее{% endblock %}
 {% block body %}
-    <h2>{{ user["name"] }}</h2>
-    <form method="post">
-        <table class="table">
-            <thead>
-            <tr>
-                {% if not current_user.is_authenticated %}
-                <th scope="col">Предмет</th>
-                <th scope="col">Результат</th>
-                    {% else %}
-                    <th scope="col">Предмет</th>
-                <th scope="col">Результат</th>
-                <th scope="col">"Грязный" результат</th>
-                {% endif %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for result in user["results"] %}
-                <tr>
-                    {% if not current_user.is_authenticated %}
-                        <td>{{ result["subject"] }}</td>
-                        <td>{{ result["value"][1] }}</td>
-                    {% else %}
-                        <td><input name="{{ result["subject"] }}" disabled type="text" value="{{ result["subject"] }}"></td>
-                        <td><input name="{{ result["subject"] }}" disabled type="text" value="{{ result["value"][1] }}"></td>
-                        <td><input name="{{ result["subject"] }}_value" type="text" value="{{ result["value"][0] }}"></td>
+    <main class="container text-center">
+        <h2>{{ user["name"] }}</h2>
+        {% if day <= config - 1 or (current_user.is_authenticated and current_user.subject == "Главный админ") %}
+            <form method="post">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        {% if not current_user.is_authenticated %}
+                            <th scope="col">Предмет</th>
+                            <th scope="col">Результат</th>
+                        {% else %}
+                            <th scope="col">Предмет</th>
+                            <th scope="col">Результат</th>
+                            <th scope="col">"Грязный" результат</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for result in user["results"] %}
+                        <tr>
+                            {% if not current_user.is_authenticated %}
+                                <td>{{ result["subject"] }}</td>
+                                <td>{{ result["value"][1] }}</td>
+                            {% else %}
+                                <td><input name="{{ result["subject"] }}" disabled type="text"
+                                           value="{{ result["subject"] }}"></td>
+                                <td><input name="{{ result["subject"] }}" disabled type="text"
+                                           value="{{ result["value"][1] }}"></td>
+                                <td><input name="{{ result["subject"] }}_value" type="text"
+                                           value="{{ result["value"][0] }}"></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% if current_user.is_authenticated %}
+                    <input class="btn btn-success" type="submit">
+                    {% if current_user.subject == "Главный админ" %}
+                        <a class="btn btn-danger" href="users/delete/{{ user["id"] }}">Удалить ученика</a>
                     {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% if current_user.is_authenticated %}
-            <input class="btn btn-success" type="submit">
+                {% endif %}
+            </form>
+        {% else %}
+            <h3>К сожалению, этот день ещё закрыт для просмотра. Если информация уже должна была появиться, обратитесь к
+                старшему администратору</h3>
         {% endif %}
-    </form>
+    </main>
 {% endblock %}

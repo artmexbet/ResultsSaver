@@ -1,10 +1,12 @@
-from flask import Flask, request, jsonify, render_template, redirect, abort, url_for
-from Utilities import *
+import logging
 from datetime import datetime
+
+from flask import Flask, request, render_template, redirect, abort
 from flask_cors import CORS, cross_origin
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from werkzeug.utils import secure_filename
-import logging
+
+from Utilities import *
 from data import db_session
 from data.admins import *
 
@@ -72,9 +74,8 @@ def users_per_day(day):
 
 
 @app.route("/")
-@cross_origin()
 def main():
-    return render_template("main.html", day=1, users=users_per_day(0))
+    return render_template("main.html", day=1, users=users_per_day(0), config=config)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -116,26 +117,10 @@ def update_admins(admin_id):
 
 @app.route("/<int:day>")
 def main_2(day):
-    return render_template("main.html", day=day + 1, users=users_per_day(day))
-
-
-@app.route("/users", methods=["POST"])
-@cross_origin()
-def users():
-    """
-    Этот route записывает в бд людей
-    :return: JSON с пользователями; 0; error
-    """
-    data = request.data
-    xlsx_file = save_xlsx_file(str(datetime.now().date()) + ".xlsx", data)
-    json_from_xlsx(xlsx_file, d)
-    logging.info("An DataBase was created by excel table")
-    # sorting(d)
-    return {"verdict": "ok"}, 200
+    return render_template("main.html", day=day + 1, users=users_per_day(day), config=config)
 
 
 @app.route("/users/<int:day>/<int:user_id>", methods=["post", "get"])
-@cross_origin()
 def get_user(day, user_id):
     try:
         if request.method == "GET":
@@ -144,7 +129,7 @@ def get_user(day, user_id):
             user["results"] = temp_result
             user.pop("days")
             logging.info("Info about users was received")
-            return render_template("more.html", user=user)
+            return render_template("more.html", user=user, config=config.opened_day, day=day)
         data = request.form
         temp = {key[:-6]: value for key, value in data.items()}
         for key, value in data.items():
@@ -155,13 +140,6 @@ def get_user(day, user_id):
         print(ex)
         logging.error(f"An error occurred: {ex} \n during received users")
         return {"error": "Такого пользователя не существует"}, 404
-
-
-def replace_results():
-    global d
-    data = request.get_json()
-    d = Day(d.directory.split("/")[1], subjects, data)
-    return {"verdict": "ok"}, 200
 
 
 def patch_users(id, data: dict):
@@ -220,19 +198,6 @@ def add_result(user_id, data):
         return {"error": str(ex)}, 400
 
 
-def search():
-    data = request.get_json()
-    """Пример json в файле example.json"""
-    if not any(map(lambda x: x == data['id'], d["users"])):
-        return {"error": "This id doesn't exist"}, 400  # Ошибка идентификатора
-    elif data["subject"] not in subjects.keys():
-        return {"error": "This subject doesn't exist"}, 400  # Такого предмета не существует
-    elif data["score"] not in range(subjects[data["subject"]][1] + 1):
-        return {"error": "Unbelievable score"}, 400  # Невозможные баллы
-    else:
-        return {"verdict": "ok"}, 200  # Всё прошло успешно
-
-
 @app.route("/users/count")
 @login_required
 def recount_main():
@@ -274,7 +239,6 @@ def add_subject():
 
 
 @app.route("/users/betters/<int:day>")
-@cross_origin()
 def betters_students(day):
     if day not in range(2):
         return {"error": "BadRequest"}, 400
@@ -288,7 +252,6 @@ def betters_students(day):
 
 
 @app.route("/users/betters/<subject>")
-@cross_origin()
 def betters_student_from_subject(subject):
     if not isinstance(subject, str) and subject not in subjects.keys():
         return {"error": "BadRequest"}, 400
@@ -297,7 +260,6 @@ def betters_student_from_subject(subject):
 
 
 @app.route("/subjects")
-@cross_origin()
 def get_subjects():
     return {"data": list(subjects.keys())}, 200
 
@@ -312,15 +274,7 @@ def delete_user():
         return {"error": "BadRequest"}, 400
 
 
-def change_day():
-    new_day = request.get_json()["new_day"]
-    d.set_day(new_day=new_day)
-    config.set_configs(day=new_day)
-    return {"verdict": "ok"}, 200
-
-
 @app.route("/users/betters/<subject>/<int:class_d>")
-@cross_origin()
 def betters_student_from_subject_n_class(subject, class_d):
     temp = sorted(list(filter(lambda x: x["class"] == class_d, betters_student_from_subject(subject))),
                   key=lambda x: -get_subject_result(x, subject))[:20]
@@ -331,7 +285,6 @@ def betters_student_from_subject_n_class(subject, class_d):
 
 
 @app.route("/users/betters")
-@cross_origin()
 def betters():
     return {"data": sorted(convert_to_betters(d["users"])[20:], key=lambda x: -sum(x["results"].values()))}
 
@@ -375,7 +328,9 @@ def login():
 @login_required
 def admin():
     if request.method == "GET":
-        return render_template("admin.html")
+        return render_template("admin.html", config=config,
+                               subjects={subject: [value[0], value[1], ",".join([str(i) for i in value[2]])] for
+                                         subject, value in subjects.items()})
     form = request.files
     if "file" not in form.keys():
         return "Нет файла!"
@@ -412,6 +367,41 @@ def res():
         abort(answer[1])
     else:
         return redirect("/users/results")
+
+
+@app.route("/users/change-day/<int:day>")
+@login_required
+def change_day(day):
+    if day in range(3):
+        if day in range(1, 3):
+            d.set_day(new_day=day - 1)
+            config.set_configs(day=day - 1)
+        config.set_configs(opened_day=day)
+        return redirect("/admin")
+    else:
+        abort(404)
+
+
+@app.route("/subjects/delete/<subject>")
+@login_required
+def delete_subject(subject):
+    if subject not in subjects.keys():
+        abort(400)
+    else:
+        del subjects[subject]
+        subjects.commit()
+        return redirect("/admin")
+
+
+@app.route("/subjects/add", methods=["POST", "GET"])
+@login_required
+def add_subject():
+    if request.method == "GET":
+        return render_template("add_subject.html")
+    form = request.form
+    subjects[form["subject"]] = [form["days"], 30, [int(str(i).strip()) for i in form["classes"].split(",")]]
+    subjects.commit()
+    return redirect("/admin")
 
 
 if __name__ == '__main__':

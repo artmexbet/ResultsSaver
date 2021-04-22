@@ -13,7 +13,9 @@
             <th scope="col">Имя</th>
             <th scope="col">Email</th>
             <th scope="col">Предмет</th>
-            <th scope="col">Редактирование</th>
+            {% if current_user.subject == "Главный админ" %}
+                <th scope="col">Редактирование</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -23,9 +25,11 @@
                 <td>{{ admin.email }}</td>
                 <td>{{ admin.name }}</td>
                 <td>{{ admin.subject }}</td>
-                <td>
-                    <a class="btn btn-warning" href="/admins/{{ admin.id }}">Редактировать</a>
-                </td>
+                {% if current_user.subject == "Главный админ" %}
+                    <td>
+                        <a class="btn btn-warning" href="/admins/{{ admin.id }}">Редактировать</a>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
