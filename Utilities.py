@@ -86,12 +86,12 @@ class Day(JsonDB):
         self.subject_database = subjects_database
         self.day = 0
 
-    def add_result(self, student_id: int, subject: str, score: int, student: dict):
+    def add_result(self, subject: str, score: int, student: dict):
         """
         Этот метод присваивает пользователю результат
-        :param student_id: id студента
         :param subject: предмет
         :param score: результат
+        :param student: информация об ученике
         :return:
         """
         if subject in self.subject_database.keys():
@@ -117,9 +117,9 @@ class Day(JsonDB):
                 self.commit()
                 break
 
-    def get_item_with_id(self, id: int) -> dict:
+    def get_item_with_id(self, item_id: int) -> dict:
         for i in range(len(self["users"])):
-            if id == self["users"][i]["id"]:
+            if item_id == self["users"][i]["id"]:
                 return self["users"][i]
         raise KeyError("Такого ключа не существует!")
 
@@ -129,10 +129,10 @@ class Day(JsonDB):
         return list(filter(lambda x: x["class"] == class_dig, self["users"]))
 
     def find_item_with_subjects(self, subject: str) -> list:
-        temp = list(filter(lambda x: subject in [k for i in x["days"] for k in i.keys()], self["users"]))
+        temp = list(filter(lambda x: subject in [k for j in x["days"] for k in j.keys()], self["users"]))
         for i, student in enumerate(temp):
-            subjects = {k[0]: k[1] for i in student["days"] for k in i.items()}
-            temp[i][subject] = subjects[subject]
+            temp_subjects = {k[0]: k[1] for i in student["days"] for k in i.items()}
+            temp[i][subject] = temp_subjects[subject]
         return temp
 
     @property
@@ -321,7 +321,8 @@ def convert_to_betters(users: list) -> list:
     day = deepcopy(users)
     for user_ind in range(len(day)):
         results = sorted(
-            {subject: result[1] for users_day in day[user_ind]["days"] for subject, result in users_day.items()}.items(),
+            {subject: result[1] for users_day in day[user_ind]["days"] for subject, result in
+             users_day.items()}.items(),
             key=lambda x: -x[1])
         day[user_ind].pop("days")
         day[user_ind]["results"] = {key: value for key, value in results}

@@ -7,11 +7,27 @@
         {% else %} Странно, дня нет
         {% endif %}
         </h1>
-{#        <form method="post">#}
-{#            <nav class="my-2 my-md-0 mr-md-3">#}
-{#                #}
-{#            </nav>#}
-{#        </form>#}
+        <form method="GET">
+            <nav class="my-2 my-md-0 mr-md-3">
+                <label for="subject">Предмет</label>
+                <select name="subject" id="subject" class="form-control dropdown-toggle">
+                    <option></option>
+                    {% for subject in subjects %}
+                        <option>{{ subject }}</option>
+                    {% endfor %}
+                </select>
+                <label for="class">Класс</label>
+                <select name="class" id="class" class="form-control dropdown-toggle">
+                    <option></option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                </select>
+                <input type="submit" class="btn btn-success">
+            </nav>
+        </form>
         <table class="table">
             <thead>
             <tr>

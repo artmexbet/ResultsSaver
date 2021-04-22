@@ -2,9 +2,9 @@ import logging
 from datetime import datetime
 
 from flask import Flask, request, render_template, redirect, abort
-from flask_cors import CORS, cross_origin
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from werkzeug.utils import secure_filename
+from waitress import serve
 
 from Utilities import *
 from data import db_session
@@ -14,7 +14,6 @@ app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 app.config["SECRET_KEY"] = "abrakadabra-key"
 app.config["UPLOAD_FOLDER"] = "temp_files"
-cors = CORS(app)
 config = Config()
 logging.basicConfig(filename='main.log',
                     format='%(asctime)s %(levelname)s %(name)s %(message)s', level=logging.DEBUG)
@@ -32,7 +31,7 @@ def handler_404(error):
     return "Not Found"
 
 
-def new_db(data: dict):  # по поводу этой штуки вообще не уверен
+def new_db():  # по поводу этой штуки вообще не уверен
     global subjects, d
     subjects_name = f"subjects-{datetime.now().date()}.json"
     subjects = JsonDB(subjects_name, {})
@@ -75,12 +74,20 @@ def users_per_day(day):
 
 @app.route("/")
 def main():
-    return render_template("main.html", day=1, users=users_per_day(0), config=config)
+    args = request.args
+    data = users_per_day(0)
+    if args:
+        for key, value in args.items():
+            if key == "subject":
+                data = list(filter(lambda x: value in x["results"], data))
+            elif key == "class":
+                data = list(filter(lambda x: x["class"] == int(value), data))
+    return render_template("main.html", day=1, users=data, config=config, subjects=list(subjects))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 @login_required
-def reqister():
+def register():
     if request.method == "POST":
         form = request.form
         db_sess = db_session.create_session()
@@ -117,7 +124,17 @@ def update_admins(admin_id):
 
 @app.route("/<int:day>")
 def main_2(day):
-    return render_template("main.html", day=day + 1, users=users_per_day(day), config=config)
+    args = request.args
+    data = users_per_day(day)
+    if args:
+        for key, value in args.items():
+            if value:
+                if key == "subject":
+                    data = list(filter(lambda x: value in x["results"].keys(), data))
+                elif key == "class":
+                    data = list(filter(lambda x: x["class"] == int(value), data))
+    return render_template("main.html", day=day + 1, users=data, config=config,
+                           subjects=list(subjects.keys()))
 
 
 @app.route("/users/<int:day>/<int:user_id>", methods=["post", "get"])
@@ -142,8 +159,8 @@ def get_user(day, user_id):
         return {"error": "Такого пользователя не существует"}, 404
 
 
-def patch_users(id, data: dict):
-    item = d.get_item_with_id(id)
+def patch_users(user_id, data: dict):
+    item = d.get_item_with_id(user_id)
     not_valid = []
     if item:
         for i in data.items():
@@ -171,7 +188,6 @@ def patch_results(user_id, changes: dict):
 
 
 @app.route("/sum")
-@cross_origin()
 def all_sum():
     result = {'users': deepcopy(d['users'])}
     for i in result['users']:
@@ -190,7 +206,7 @@ def add_result(user_id, data):
     try:
         student = d.get_item_with_id(user_id)
         if student["class"] in subjects[data["subject"]][2]:
-            return d.add_result(user_id, data["subject"], data["score"], student)
+            return d.add_result(data["subject"], data["score"], student)
         return {"error": "Этот пользователь не может писать этот предмет"}, 401
     except Exception as ex:
         print(ex)
@@ -297,7 +313,6 @@ def get_admins():
 
 
 @app.route("/users/betters/teams")
-@cross_origin()
 def better_teams():
     return {"data": d.count_teams}
 
@@ -406,4 +421,5 @@ def add_subject():
 
 if __name__ == '__main__':
     db_session.global_init("db/iti.db")
-    app.run(host="localhost")
+    # app.run(host="localhost")
+    serve(app, host="localhost")
