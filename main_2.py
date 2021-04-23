@@ -76,13 +76,7 @@ def users_per_day(day):
 def main():
     args = request.args
     data = users_per_day(0)
-    if args:
-        for key, value in args.items():
-            if value:
-                if key == "subject":
-                    data = list(filter(lambda x: value in x["results"], data))
-                elif key == "class":
-                    data = list(filter(lambda x: x["class"] == int(value), data))
+    data = filtered_data(args, data)
     return render_template("main.html", day=1, users=data, config=config, subjects=list(subjects))
 
 
@@ -127,6 +121,18 @@ def update_admins(admin_id):
 def main_2(day):
     args = request.args
     data = users_per_day(day)
+    data = filtered_data(args, data)
+    return render_template("main.html", day=day + 1, users=data, config=config,
+                           subjects=list(subjects.keys()))
+
+
+def filtered_data(args, data):
+    """
+    Функция возвращает отфильтрованные данные
+    :param args: ключи фильтрации
+    :param data: данные для фильтрации
+    :return:
+    """
     if args:
         for key, value in args.items():
             if value:
@@ -134,8 +140,7 @@ def main_2(day):
                     data = list(filter(lambda x: value in x["results"].keys(), data))
                 elif key == "class":
                     data = list(filter(lambda x: x["class"] == int(value), data))
-    return render_template("main.html", day=day + 1, users=data, config=config,
-                           subjects=list(subjects.keys()))
+    return data
 
 
 @app.route("/users/<int:day>/<int:user_id>", methods=["post", "get"])
@@ -229,7 +234,7 @@ def add_user():
 
 
 def route_new_db():
-    new_db(request.get_json())
+    new_db()
 
 
 @app.route("/admins/<int:admin_id>/delete")
@@ -246,26 +251,18 @@ def remove_admin(admin_id):
         return {"error": "BadRequest"}, 400
 
 
-def add_subject():
-    data = request.get_json()
-    if data["subject"] not in subjects.keys():
-        subjects[data["subject"]] = data["values"]
-        subjects.commit()
-        return {"verdict": "ok"}, 200
-    return {"error": "BadRequest"}, 400
-
-
 @app.route("/users/betters/<int:day>")
 def betters_students(day):
+    args = request.args
     if day not in range(2):
         return {"error": "BadRequest"}, 400
-    students = sorted(d["users"].copy(), reverse=True,
+    students = sorted(deepcopy(d["users"]), reverse=True,
                       key=lambda x: sum(map(lambda k: k[1],
                                             sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
-    # if class_dig not in range(*d.classes_count) and not isinstance(class_dig, int):
-    #     return {"error": "BadRequest"}, 400
-    # all_this_class_students = convert_to_betters(d.get_items_with_class(class_dig))
-    return render_template("main.html", day=day + 1, users=students[:20])
+    for i, student in enumerate(students):
+        students[i]["results"] = student["days"][day]
+        students[i].pop("days")
+    return render_template("main.html", day=day + 1, users=filtered_data(args, students)[:20], subjects=subjects)
 
 
 @app.route("/users/betters/<subject>")

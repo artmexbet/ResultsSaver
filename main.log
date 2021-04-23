@@ -136,3 +136,147 @@ TypeError: url_for() takes 1 positional argument but 2 were given
 2021-04-23 00:07:09,225 INFO waitress Serving on http://[::1]:8080
 2021-04-23 00:07:09,225 INFO waitress Serving on http://127.0.0.1:8080
 2021-04-23 00:07:10,807 INFO root Info about users in 0 day was received
+2021-04-23 11:24:26,692 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:24:26,696 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:24:48,637 INFO root Info about users in 0 day was received
+2021-04-23 11:25:14,592 ERROR main_2 Exception on /users/betters/0 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 262, in betters_students
+    return render_template("main.html", day=day + 1, users=filtered_data(args, students)[:20], subjects=subjects)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 140, in filtered_data
+    data = list(filter(lambda x: value in x["results"].keys(), data))
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 140, in <lambda>
+    data = list(filter(lambda x: value in x["results"].keys(), data))
+KeyError: 'results'
+2021-04-23 11:25:14,630 CRITICAL root Internal Server Error
+2021-04-23 11:25:14,716 CRITICAL root Not Found
+2021-04-23 11:28:07,552 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:28:07,553 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:30:14,061 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:30:14,061 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:30:25,798 ERROR main_2 Exception on /users/betters/0 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 259, in betters_students
+    students = sorted(d["users"].copy(), reverse=True,
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 261, in <lambda>
+    sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
+KeyError: 'days'
+2021-04-23 11:30:25,800 CRITICAL root Internal Server Error
+2021-04-23 11:30:25,873 CRITICAL root Not Found
+2021-04-23 11:31:11,317 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:31:11,317 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:31:29,611 INFO root Info about users in 0 day was received
+2021-04-23 11:32:04,347 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:32:04,347 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:32:09,889 ERROR main_2 Exception on /users/betters/1 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 259, in betters_students
+    students = sorted(d["users"].copy(), reverse=True,
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 261, in <lambda>
+    sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
+KeyError: 'days'
+2021-04-23 11:32:09,891 CRITICAL root Internal Server Error
+2021-04-23 11:32:09,949 CRITICAL root Not Found
+2021-04-23 11:33:14,008 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:33:14,008 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:33:19,794 ERROR main_2 Exception on /users/betters/1 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 259, in betters_students
+    students = sorted(d["users"].copy(), reverse=True,
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 261, in <lambda>
+    sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
+KeyError: 'days'
+2021-04-23 11:33:19,796 CRITICAL root Internal Server Error
+2021-04-23 11:33:19,851 CRITICAL root Not Found
+2021-04-23 11:33:21,673 ERROR main_2 Exception on /users/betters/1 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 259, in betters_students
+    students = sorted(d["users"].copy(), reverse=True,
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 261, in <lambda>
+    sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
+KeyError: 'days'
+2021-04-23 11:33:21,674 CRITICAL root Internal Server Error
+2021-04-23 11:33:21,727 CRITICAL root Not Found
+2021-04-23 11:33:30,339 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:33:30,339 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:34:04,948 ERROR main_2 Exception on /users/betters/0 [GET]
+Traceback (most recent call last):
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Projects\PyCharm\FlaskWeb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 259, in betters_students
+    students = sorted(d["users"].copy(), reverse=True,
+  File "D:\Projects\PyCharm\FlaskWeb\main_2.py", line 261, in <lambda>
+    sorted(x["days"][day].values(), reverse=True, key=lambda j: j[1])[:2])))
+KeyError: 'days'
+2021-04-23 11:34:04,950 CRITICAL root Internal Server Error
+2021-04-23 11:34:05,006 CRITICAL root Not Found
