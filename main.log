@@ -280,3 +280,12 @@ Traceback (most recent call last):
 KeyError: 'days'
 2021-04-23 11:34:04,950 CRITICAL root Internal Server Error
 2021-04-23 11:34:05,006 CRITICAL root Not Found
+2021-04-23 11:34:32,929 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:34:32,929 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:42:45,025 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:42:45,025 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:42:56,035 CRITICAL root Not Found
+2021-04-23 11:43:03,249 CRITICAL root Not Found
+2021-04-23 11:43:43,420 INFO waitress Serving on http://[::1]:8080
+2021-04-23 11:43:43,420 INFO waitress Serving on http://127.0.0.1:8080
+2021-04-23 11:43:45,865 CRITICAL root Not Found

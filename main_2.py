@@ -22,13 +22,27 @@ logging.basicConfig(filename='main.log',
 @app.errorhandler(500)
 def handler_500(error):
     logging.critical("Internal Server Error")
-    return "Internal Server Error"
+    return render_template("error.html", title="Ошибка", error_code=500, message="Упс... Что-то пошло не так."
+                                                                                 "Обратитесь к администратору по"
+                                                                                 "email(maydurov2004@yandex.ru)")
 
 
 @app.errorhandler(404)
 def handler_404(error):
     logging.critical("Not Found")
-    return "Not Found"
+    return render_template("error.html", title="Ошибка", error_code=404,
+                           message="Упс... Данных, которые вы ищите, не оказалось на сервере."
+                                   " Если они должны тут быть, обратитесь к"
+                                   " администратору по email(maydurov2004@yandex.ru)")
+
+
+@app.errorhandler(400)
+def handler_400(error):
+    logging.critical("Bad Request")
+    return render_template("error.html", title="Ошибка", error_code=400,
+                           message="Упс... Кажется, вы послали серверу неправильные данные."
+                                   " Если данные верны, обратитесь к"
+                                   " администратору по email(maydurov2004@yandex.ru)")
 
 
 def new_db():  # по поводу этой штуки вообще не уверен
